@@ -34,6 +34,12 @@ int main()
         Logger::Log(LogLevel::Info, "DX12 device created successfully");
     }
 
+    auto commandQueue = deviceContext.GetCommandQueue();
+    if (commandQueue)
+    {
+        Logger::Log(LogLevel::Info, "Command queue ready");
+    }
+
     Logger::Log(LogLevel::Info, "Engine started");
     return 0;
 }

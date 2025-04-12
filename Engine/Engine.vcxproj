@@ -133,6 +133,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Core\Rendering\CommandQueue.cpp" />
     <ClCompile Include="Core\Rendering\DeviceContext.cpp" />
     <ClCompile Include="Core\Utils\D3DUtils.cpp" />
     <ClCompile Include="Core\Utils\Debug.cpp" />
@@ -141,6 +142,7 @@
     <ClCompile Include="Engine.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Core\Rendering\CommandQueue.h" />
     <ClInclude Include="Core\Rendering\DeviceContext.h" />
     <ClInclude Include="Core\Utils\D3DUtils.h" />
     <ClInclude Include="Core\Utils\Debug.h" />

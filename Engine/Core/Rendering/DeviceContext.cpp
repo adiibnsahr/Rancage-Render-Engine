@@ -25,6 +25,12 @@ bool DeviceContext::Initialize() {
     }
     Logger::Log(LogLevel::Info, "Device created");
 
+    if (!m_CommandQueue.Initialize(m_Device))
+    {
+        Logger::Log(LogLevel::Error, "Failed to initialize command queue");
+        return false;
+    }
+
     return true;
 }
 
