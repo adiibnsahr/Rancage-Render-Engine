@@ -28,6 +28,12 @@ int main()
         Logger::Log(LogLevel::Info, "Using adapter: " + WStringToString(desc.Description));
     }
 
+    auto device = deviceContext.GetDevice();
+    if (device)
+    {
+        Logger::Log(LogLevel::Info, "DX12 device created successfully");
+    }
+
     Logger::Log(LogLevel::Info, "Engine started");
     return 0;
 }

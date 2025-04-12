@@ -37,6 +37,9 @@
     <ClCompile Include="Core\Utils\StringUtils.cpp">
       <Filter>Source Files\Core\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Utils\D3DUtils.cpp">
+      <Filter>Source Files\Core\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Utils\Logger.h">
@@ -49,6 +52,9 @@
       <Filter>Source Files\Core\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="Core\Utils\StringUtils.h">
+      <Filter>Source Files\Core\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Utils\D3DUtils.h">
       <Filter>Source Files\Core\Utils</Filter>
     </ClInclude>
   </ItemGroup>
