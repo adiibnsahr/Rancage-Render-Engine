@@ -43,6 +43,9 @@
     <ClCompile Include="Core\Rendering\CommandQueue.cpp">
       <Filter>Source Files\Core\Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Rendering\SwapChain.cpp">
+      <Filter>Source Files\Core\Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Utils\Logger.h">
@@ -61,6 +64,9 @@
       <Filter>Source Files\Core\Utils</Filter>
     </ClInclude>
     <ClInclude Include="Core\Rendering\CommandQueue.h">
+      <Filter>Source Files\Core\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Rendering\SwapChain.h">
       <Filter>Source Files\Core\Rendering</Filter>
     </ClInclude>
   </ItemGroup>

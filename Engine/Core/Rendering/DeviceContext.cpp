@@ -4,7 +4,7 @@
 #include "../Utils/Logger.h"
 #include "../Utils/D3DUtils.h"
 
-bool DeviceContext::Initialize() {
+bool DeviceContext::Initialize(HWND hwnd, UINT width, UINT height) {
     HRESULT hr = CreateDXGIFactory2(0, IID_PPV_ARGS(&m_Factory));
     if (FAILED(hr)) {
         Logger::Log(LogLevel::Error, "Failed to create DXGI factory: HRESULT " + std::to_string(hr));
@@ -30,6 +30,14 @@ bool DeviceContext::Initialize() {
         Logger::Log(LogLevel::Error, "Failed to initialize command queue");
         return false;
     }
+    Logger::Log(LogLevel::Info, "Command queue initialized");
+
+    if (!m_SwapChain.Initialize(hwnd, m_Factory, m_CommandQueue.GetQueue(), width, height))
+    {
+        Logger::Log(LogLevel::Error, "Failed to initialize swap chain");
+        return false;
+    }
+    Logger::Log(LogLevel::Info, "Swap chain initialized");
 
     return true;
 }

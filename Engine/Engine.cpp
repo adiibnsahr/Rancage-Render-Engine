@@ -2,9 +2,40 @@
 #include "Core/Utils/Logger.h"
 #include "Core/Rendering/DeviceContext.h"
 #include "Core/Utils/StringUtils.h"
+#include <Windows.h>
+
+LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+    switch (msg)
+    {
+        case WM_DESTROY:
+            PostQuitMessage(0);
+            return 0;
+    }
+    return DefWindowProc(hwnd, msg, wParam, lParam);
+}
 
 int main()
 {
+    const wchar_t* className = L"RenderWindowClass";
+    WNDCLASS wc = {};
+    wc.lpfnWndProc = WndProc;
+    wc.hInstance = GetModuleHandle(nullptr);
+    wc.lpszClassName = className;
+    RegisterClass(&wc);
+
+    UINT width = 1280;
+    UINT height = 720;
+    HWND hwnd = CreateWindow(className, L"Rancage Render Engine", WS_OVERLAPPEDWINDOW,
+                            CW_USEDEFAULT, CW_USEDEFAULT, width, height, nullptr,
+                            nullptr, GetModuleHandle(nullptr), nullptr);
+
+    if (!hwnd)
+    {
+        return 1;
+    }
+    ShowWindow(hwnd, SW_SHOW);
+
     Logger::Init("Logs/debug.log");
     if (!Debug::Initialize())
     {
@@ -13,7 +44,7 @@ int main()
     }
 
     DeviceContext deviceContext;
-    if (!deviceContext.Initialize())
+    if (!deviceContext.Initialize(hwnd, width, height))
     {
         Logger::Log(LogLevel::Error, "Device context initialization failed");
         return 1;
@@ -40,6 +71,20 @@ int main()
         Logger::Log(LogLevel::Info, "Command queue ready");
     }
 
+    auto swapChain = deviceContext.GetSwapChain();
+    if (swapChain)
+    {
+        Logger::Log(LogLevel::Info, "Swap chain ready");
+    }
+
     Logger::Log(LogLevel::Info, "Engine started");
+
+    MSG msg = {};
+    while (GetMessage(&msg, nullptr, 0, 0))
+    {
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
+    }
+
     return 0;
 }

@@ -4,16 +4,18 @@
 #include <wrl.h>
 #include "../Utils/Logger.h"
 #include "CommandQueue.h"
+#include "SwapChain.h"
 
 using Microsoft::WRL::ComPtr;
 
 class DeviceContext
 {
 public:
-	bool Initialize();
+	bool Initialize(HWND hwnd, UINT width, UINT height);
 	ComPtr<IDXGIAdapter1> GetAdapter() const { return m_Adapter; }
 	ComPtr<ID3D12Device> GetDevice() const { return m_Device; }
 	ComPtr<ID3D12CommandQueue> GetCommandQueue() const { return m_CommandQueue.GetQueue(); }
+	ComPtr<IDXGISwapChain3> GetSwapChain() const { return m_SwapChain.GetSwapChain(); }
 
 private:
 	bool QueryAdapter();
@@ -22,4 +24,5 @@ private:
 	ComPtr<IDXGIAdapter1> m_Adapter;
 	ComPtr<ID3D12Device> m_Device;
 	CommandQueue m_CommandQueue;
+	SwapChain m_SwapChain;
 };
