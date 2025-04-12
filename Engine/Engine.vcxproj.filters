@@ -34,6 +34,9 @@
     <ClCompile Include="Core\Rendering\DeviceContext.cpp">
       <Filter>Source Files\Core\Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Utils\StringUtils.cpp">
+      <Filter>Source Files\Core\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Utils\Logger.h">
@@ -44,6 +47,9 @@
     </ClInclude>
     <ClInclude Include="Core\Rendering\DeviceContext.h">
       <Filter>Source Files\Core\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Utils\StringUtils.h">
+      <Filter>Source Files\Core\Utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

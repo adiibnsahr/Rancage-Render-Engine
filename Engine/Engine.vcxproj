@@ -136,12 +136,14 @@
     <ClCompile Include="Core\Rendering\DeviceContext.cpp" />
     <ClCompile Include="Core\Utils\Debug.cpp" />
     <ClCompile Include="Core\Utils\Logger.cpp" />
+    <ClCompile Include="Core\Utils\StringUtils.cpp" />
     <ClCompile Include="Engine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Rendering\DeviceContext.h" />
     <ClInclude Include="Core\Utils\Debug.h" />
     <ClInclude Include="Core\Utils\Logger.h" />
+    <ClInclude Include="Core\Utils\StringUtils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
