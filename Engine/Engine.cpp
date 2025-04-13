@@ -77,6 +77,18 @@ int main()
         Logger::Log(LogLevel::Info, "Swap chain ready");
     }
 
+    auto rtvHeap = deviceContext.GetRTVHeap();
+    if (rtvHeap)
+    {
+        Logger::Log(LogLevel::Info, "RTV descriptor heap ready");
+    }
+
+    auto dsvHeap = deviceContext.GetDSVHeap();
+    if (dsvHeap)
+    {
+        Logger::Log(LogLevel::Info, "DSV descriptor heap ready");
+    }
+
     Logger::Log(LogLevel::Info, "Engine started");
 
     MSG msg = {};

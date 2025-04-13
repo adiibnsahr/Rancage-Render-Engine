@@ -39,6 +39,20 @@ bool DeviceContext::Initialize(HWND hwnd, UINT width, UINT height) {
     }
     Logger::Log(LogLevel::Info, "Swap chain initialized");
 
+    if (!m_RTVHeap.Initialize(m_Device, D3D12_DESCRIPTOR_HEAP_TYPE_RTV, 2))
+    {
+        Logger::Log(LogLevel::Error, "Failed to initialize RTV descriptor heap");
+        return false;
+    }
+    Logger::Log(LogLevel::Info, "RTV Descriptor heap initialized");
+
+    if (!m_DSVHeap.Initialize(m_Device, D3D12_DESCRIPTOR_HEAP_TYPE_DSV, 1))
+    {
+        Logger::Log(LogLevel::Error, "Failed to initialize DSV descriptor heap");
+        return false;
+    }
+    Logger::Log(LogLevel::Info, "DSV Descriptor heap initialized");
+
     return true;
 }
 

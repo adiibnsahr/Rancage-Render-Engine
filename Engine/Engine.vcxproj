@@ -134,6 +134,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Core\Rendering\CommandQueue.cpp" />
+    <ClCompile Include="Core\Rendering\DescriptorHeap.cpp" />
     <ClCompile Include="Core\Rendering\DeviceContext.cpp" />
     <ClCompile Include="Core\Rendering\SwapChain.cpp" />
     <ClCompile Include="Core\Utils\D3DUtils.cpp" />
@@ -144,6 +145,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Rendering\CommandQueue.h" />
+    <ClInclude Include="Core\Rendering\DescriptorHeap.h" />
     <ClInclude Include="Core\Rendering\DeviceContext.h" />
     <ClInclude Include="Core\Rendering\SwapChain.h" />
     <ClInclude Include="Core\Utils\D3DUtils.h" />
