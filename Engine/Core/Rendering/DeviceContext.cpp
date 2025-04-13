@@ -60,6 +60,13 @@ bool DeviceContext::Initialize(HWND hwnd, UINT width, UINT height) {
     }
     Logger::Log(LogLevel::Info, "Depth buffer initialized");
 
+    if (!m_RootSignature.Initialize(m_Device))
+    {
+        Logger::Log(LogLevel::Error, "Failed to initialize root signature");
+        return false;
+    }
+    Logger::Log(LogLevel::Info, "Root signature initialized");
+
     return true;
 }
 

@@ -137,6 +137,7 @@
     <ClCompile Include="Core\Rendering\DepthBuffer.cpp" />
     <ClCompile Include="Core\Rendering\DescriptorHeap.cpp" />
     <ClCompile Include="Core\Rendering\DeviceContext.cpp" />
+    <ClCompile Include="Core\Rendering\RootSignature.cpp" />
     <ClCompile Include="Core\Rendering\SwapChain.cpp" />
     <ClCompile Include="Core\Utils\D3DUtils.cpp" />
     <ClCompile Include="Core\Utils\Debug.cpp" />
@@ -149,6 +150,7 @@
     <ClInclude Include="Core\Rendering\DepthBuffer.h" />
     <ClInclude Include="Core\Rendering\DescriptorHeap.h" />
     <ClInclude Include="Core\Rendering\DeviceContext.h" />
+    <ClInclude Include="Core\Rendering\RootSignature.h" />
     <ClInclude Include="Core\Rendering\SwapChain.h" />
     <ClInclude Include="Core\Utils\D3DUtils.h" />
     <ClInclude Include="Core\Utils\Debug.h" />

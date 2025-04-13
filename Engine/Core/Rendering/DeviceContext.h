@@ -8,6 +8,7 @@
 #include "SwapChain.h"
 #include "DescriptorHeap.h"
 #include "DepthBuffer.h"
+#include "RootSignature.h"
 
 using Microsoft::WRL::ComPtr;
 
@@ -23,6 +24,7 @@ public:
 	ComPtr<ID3D12DescriptorHeap> GetDSVHeap() const { return m_DSVHeap.GetHeap(); }
 	ComPtr<ID3D12Resource> GetDepthBuffer() const { return m_DepthBuffer.GetDepthBuffer(); }
 	D3D12_CPU_DESCRIPTOR_HANDLE GetDSV() const { return m_DepthBuffer.GetDSV(); }
+	ComPtr<ID3D12RootSignature> GetRootSignature() const { return m_RootSignature.GetRootSignature(); }
 
 private:
 	bool QueryAdapter();
@@ -35,4 +37,5 @@ private:
 	DescriptorHeap m_RTVHeap;
 	DescriptorHeap m_DSVHeap;
 	DepthBuffer m_DepthBuffer;
+	RootSignature m_RootSignature;
 };

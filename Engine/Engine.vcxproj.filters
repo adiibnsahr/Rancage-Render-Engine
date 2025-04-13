@@ -52,6 +52,9 @@
     <ClCompile Include="Core\Rendering\DepthBuffer.cpp">
       <Filter>Source Files\Core\Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Rendering\RootSignature.cpp">
+      <Filter>Source Files\Core\Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Utils\Logger.h">
@@ -79,6 +82,9 @@
       <Filter>Source Files\Core\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="Core\Rendering\DepthBuffer.h">
+      <Filter>Source Files\Core\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Rendering\RootSignature.h">
       <Filter>Source Files\Core\Rendering</Filter>
     </ClInclude>
   </ItemGroup>

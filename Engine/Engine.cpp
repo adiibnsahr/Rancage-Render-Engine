@@ -95,6 +95,12 @@ int main()
         Logger::Log(LogLevel::Info, "Depth buffer ready");
     }
 
+    auto rootSignature = deviceContext.GetRootSignature();
+    if (rootSignature)
+    {
+        Logger::Log(LogLevel::Info, "Root signature ready");
+    }
+
     Logger::Log(LogLevel::Info, "Engine started");
 
     MSG msg = {};
