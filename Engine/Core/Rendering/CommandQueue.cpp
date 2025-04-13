@@ -25,7 +25,7 @@ bool CommandQueue::Initialize(ComPtr<ID3D12Device> device)
 	Logger::Log(LogLevel::Info, "Command queue created");
 
 	// Buat fence
-	Logger::Log(LogLevel::Info, "Creatiing fence...");
+	Logger::Log(LogLevel::Info, "Creating fence...");
 	hr = device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_Fence));
 	if (FAILED(hr))
 	{
@@ -42,6 +42,16 @@ bool CommandQueue::Initialize(ComPtr<ID3D12Device> device)
 		return false;
 	}
 	Logger::Log(LogLevel::Info, "Fence event created");
+
+	// Buat command allocator
+	Logger::Log(LogLevel::Info, "Creating command allocator...");
+	hr = device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&m_CommandAllocator));
+	if (FAILED(hr))
+	{
+		Logger::Log(LogLevel::Error, "Failed to create command allocator: HRESULT " + std::to_string(hr));
+		return false;
+	}
+	Logger::Log(LogLevel::Info, "Command allocator created");
 
 	return true;
 }

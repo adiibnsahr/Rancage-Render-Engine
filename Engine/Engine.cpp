@@ -71,6 +71,12 @@ int main()
         Logger::Log(LogLevel::Info, "Command queue ready (with fence)");
     }
 
+    auto commandAllocator = deviceContext.GetCommandAllocator();
+    if (commandAllocator)
+    {
+        Logger::Log(LogLevel::Info, "Command allocator ready");
+    }
+
     auto swapChain = deviceContext.GetSwapChain();
     if (swapChain)
     {
