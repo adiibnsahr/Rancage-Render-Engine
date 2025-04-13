@@ -89,6 +89,12 @@ int main()
         Logger::Log(LogLevel::Info, "DSV descriptor heap ready");
     }
 
+    auto depthBuffer = deviceContext.GetDepthBuffer();
+    if (depthBuffer)
+    {
+        Logger::Log(LogLevel::Info, "Depth buffer ready");
+    }
+
     Logger::Log(LogLevel::Info, "Engine started");
 
     MSG msg = {};

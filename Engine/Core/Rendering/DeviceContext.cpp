@@ -53,6 +53,13 @@ bool DeviceContext::Initialize(HWND hwnd, UINT width, UINT height) {
     }
     Logger::Log(LogLevel::Info, "DSV Descriptor heap initialized");
 
+    if (!m_DepthBuffer.Initialize(m_Device, m_DSVHeap, width, height))
+    {
+        Logger::Log(LogLevel::Error, "Failed to initialize depth buffer");
+        return false;
+    }
+    Logger::Log(LogLevel::Info, "Depth buffer initialized");
+
     return true;
 }
 

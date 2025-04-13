@@ -1,4 +1,5 @@
 #pragma once
+#include <Windows.h>
 #include <dxgi1_6.h>
 #include <d3d12.h>
 #include <wrl.h>
@@ -6,6 +7,7 @@
 #include "CommandQueue.h"
 #include "SwapChain.h"
 #include "DescriptorHeap.h"
+#include "DepthBuffer.h"
 
 using Microsoft::WRL::ComPtr;
 
@@ -19,6 +21,8 @@ public:
 	ComPtr<IDXGISwapChain3> GetSwapChain() const { return m_SwapChain.GetSwapChain(); }
 	ComPtr<ID3D12DescriptorHeap> GetRTVHeap() const { return m_RTVHeap.GetHeap(); }
 	ComPtr<ID3D12DescriptorHeap> GetDSVHeap() const { return m_DSVHeap.GetHeap(); }
+	ComPtr<ID3D12Resource> GetDepthBuffer() const { return m_DepthBuffer.GetDepthBuffer(); }
+	D3D12_CPU_DESCRIPTOR_HANDLE GetDSV() const { return m_DepthBuffer.GetDSV(); }
 
 private:
 	bool QueryAdapter();
@@ -30,4 +34,5 @@ private:
 	SwapChain m_SwapChain;
 	DescriptorHeap m_RTVHeap;
 	DescriptorHeap m_DSVHeap;
+	DepthBuffer m_DepthBuffer;
 };
