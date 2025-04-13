@@ -68,7 +68,7 @@ int main()
     auto commandQueue = deviceContext.GetCommandQueue();
     if (commandQueue)
     {
-        Logger::Log(LogLevel::Info, "Command queue ready");
+        Logger::Log(LogLevel::Info, "Command queue ready (with fence)");
     }
 
     auto swapChain = deviceContext.GetSwapChain();

@@ -24,5 +24,56 @@ bool CommandQueue::Initialize(ComPtr<ID3D12Device> device)
 	}
 	Logger::Log(LogLevel::Info, "Command queue created");
 
+	// Buat fence
+	Logger::Log(LogLevel::Info, "Creatiing fence...");
+	hr = device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_Fence));
+	if (FAILED(hr))
+	{
+		Logger::Log(LogLevel::Error, "Failed to create fence: HRESULT " + std::to_string(hr));
+		return false;
+	}
+	Logger::Log(LogLevel::Info, "Fence created");
+
+	// Buat fence event
+	m_FenceEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
+	if (m_FenceEvent == nullptr)
+	{
+		Logger::Log(LogLevel::Error, "Failed to create fence event: Error " + std::to_string(GetLastError()));
+		return false;
+	}
+	Logger::Log(LogLevel::Info, "Fence event created");
+
 	return true;
+}
+
+void CommandQueue::WaitForFence()
+{
+	if (!m_Queue || !m_Fence || !m_FenceEvent)\
+	{
+		Logger::Log(LogLevel::Error, "Cannot wait for fence: Queue, fence, or event is null");
+		return;
+	}
+
+	// Signal fence dengan fence value berikutnya
+	const UINT64 fenceValueToSignal = m_FenceValue + 1;
+	HRESULT hr = m_Queue->Signal(m_Fence.Get(), fenceValueToSignal);
+	if (FAILED(hr))
+	{
+		Logger::Log(LogLevel::Error, "Failed to signal fence: HRESULT " + std::to_string(hr));
+		return;
+	}
+
+	if (m_Fence->GetCompletedValue() < fenceValueToSignal)
+	{
+		hr = m_Fence->SetEventOnCompletion(fenceValueToSignal, m_FenceEvent);
+		if (FAILED(hr))
+		{
+			Logger::Log(LogLevel::Error, "Failed to set fence event: HRESULT " + std::to_string(hr));
+			return;
+		}
+		WaitForSingleObject(m_FenceEvent, INFINITE);
+	}
+
+	// Update fence value
+	m_FenceValue = fenceValueToSignal;
 }
