@@ -25,7 +25,7 @@ bool DeviceContext::Initialize(HWND hwnd, UINT width, UINT height) {
     }
     Logger::Log(LogLevel::Info, "Device created");
 
-    if (!m_CommandQueue.Initialize(m_Device))
+    if (!m_CommandQueue.Initialize(m_Device, m_PipelineState.GetPipelineState()))
     {
         Logger::Log(LogLevel::Error, "Failed to initialize command queue");
         return false;

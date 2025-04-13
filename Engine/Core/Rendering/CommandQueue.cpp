@@ -1,7 +1,7 @@
 #include "CommandQueue.h"
 #include "../Utils/Logger.h"
 
-bool CommandQueue::Initialize(ComPtr<ID3D12Device> device)
+bool CommandQueue::Initialize(ComPtr<ID3D12Device> device, ComPtr<ID3D12PipelineState> pipelineState)
 {
 	if (!device)
 	{
@@ -52,6 +52,25 @@ bool CommandQueue::Initialize(ComPtr<ID3D12Device> device)
 		return false;
 	}
 	Logger::Log(LogLevel::Info, "Command allocator created");
+
+	// Buat command list
+	Logger::Log(LogLevel::Info, "Creating command list...");
+	hr = device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_CommandAllocator.Get(), pipelineState.Get(), IID_PPV_ARGS(&m_CommandList));
+	if (FAILED(hr))
+	{
+		Logger::Log(LogLevel::Error, "Failed to create command list: HRESULT " + std::to_string(hr));
+		return false;
+	}
+	Logger::Log(LogLevel::Info, "Command list created");
+	
+	// Tutup command list (harus ditutup dulu sebelum bisa dieksekusi
+	hr = m_CommandList->Close();
+	if (FAILED(hr))
+	{
+		Logger::Log(LogLevel::Error, "Failed to close command list: HRESULT " + std::to_string(hr));
+		return false;
+	}
+	Logger::Log(LogLevel::Info, "Command list initialized");
 
 	return true;
 }

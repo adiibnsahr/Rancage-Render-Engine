@@ -21,6 +21,7 @@ public:
 	ComPtr<ID3D12Device> GetDevice() const { return m_Device; }
 	ComPtr<ID3D12CommandQueue> GetCommandQueue() const { return m_CommandQueue.GetQueue(); }
 	ComPtr<ID3D12CommandAllocator> GetCommandAllocator() const { return m_CommandQueue.GetCommandAllocator(); }
+	ComPtr<ID3D12GraphicsCommandList> GetCommandList() const { return m_CommandQueue.GetCommandList(); }
 	ComPtr<IDXGISwapChain3> GetSwapChain() const { return m_SwapChain.GetSwapChain(); }
 	ComPtr<ID3D12DescriptorHeap> GetRTVHeap() const { return m_RTVHeap.GetHeap(); }
 	ComPtr<ID3D12DescriptorHeap> GetDSVHeap() const { return m_DSVHeap.GetHeap(); }

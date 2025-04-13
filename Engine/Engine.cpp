@@ -77,6 +77,12 @@ int main()
         Logger::Log(LogLevel::Info, "Command allocator ready");
     }
 
+    auto commandList = deviceContext.GetCommandList();
+    if (commandList)
+    {
+        Logger::Log(LogLevel::Info, "Command list ready");
+    }
+
     auto swapChain = deviceContext.GetSwapChain();
     if (swapChain)
     {
