@@ -101,6 +101,12 @@ int main()
         Logger::Log(LogLevel::Info, "Root signature ready");
     }
 
+    auto pipelineState = deviceContext.GetPipelineState();
+    if (pipelineState)
+    {
+        Logger::Log(LogLevel::Info, "Pipeline state ready");
+    }
+
     Logger::Log(LogLevel::Info, "Engine started");
 
     MSG msg = {};

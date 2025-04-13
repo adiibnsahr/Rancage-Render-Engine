@@ -9,6 +9,7 @@
 #include "DescriptorHeap.h"
 #include "DepthBuffer.h"
 #include "RootSignature.h"
+#include "PipelineState.h"
 
 using Microsoft::WRL::ComPtr;
 
@@ -25,6 +26,7 @@ public:
 	ComPtr<ID3D12Resource> GetDepthBuffer() const { return m_DepthBuffer.GetDepthBuffer(); }
 	D3D12_CPU_DESCRIPTOR_HANDLE GetDSV() const { return m_DepthBuffer.GetDSV(); }
 	ComPtr<ID3D12RootSignature> GetRootSignature() const { return m_RootSignature.GetRootSignature(); }
+	ComPtr<ID3D12PipelineState> GetPipelineState() const { return m_PipelineState.GetPipelineState(); }
 
 private:
 	bool QueryAdapter();
@@ -38,4 +40,5 @@ private:
 	DescriptorHeap m_DSVHeap;
 	DepthBuffer m_DepthBuffer;
 	RootSignature m_RootSignature;
+	PipelineState m_PipelineState;
 };

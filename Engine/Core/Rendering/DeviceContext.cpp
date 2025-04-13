@@ -67,6 +67,13 @@ bool DeviceContext::Initialize(HWND hwnd, UINT width, UINT height) {
     }
     Logger::Log(LogLevel::Info, "Root signature initialized");
 
+    if (!m_PipelineState.Initialize(m_Device, m_RootSignature.GetRootSignature()))
+    {
+        Logger::Log(LogLevel::Error, "Failed to initialize pipeline state");
+        return false;
+    }
+    Logger::Log(LogLevel::Info, "Pipeline state initialized");
+
     return true;
 }
 

@@ -20,6 +20,9 @@
     <Filter Include="Source Files\Core\Utils">
       <UniqueIdentifier>{8475a327-1132-47bf-ba9c-6abe6d70a951}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Shaders">
+      <UniqueIdentifier>{4d528759-8816-487e-8ed4-43c19ec8d9bb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -55,6 +58,9 @@
     <ClCompile Include="Core\Rendering\RootSignature.cpp">
       <Filter>Source Files\Core\Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Rendering\PipelineState.cpp">
+      <Filter>Source Files\Core\Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Utils\Logger.h">
@@ -87,5 +93,16 @@
     <ClInclude Include="Core\Rendering\RootSignature.h">
       <Filter>Source Files\Core\Rendering</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Rendering\PipelineState.h">
+      <Filter>Source Files\Core\Rendering</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shaders\VertexShader.hlsl">
+      <Filter>Source Files\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\PixelShader.hlsl">
+      <Filter>Source Files\Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
