@@ -141,6 +141,7 @@
     <ClCompile Include="Core\Rendering\PipelineState.cpp" />
     <ClCompile Include="Core\Rendering\RootSignature.cpp" />
     <ClCompile Include="Core\Rendering\SwapChain.cpp" />
+    <ClCompile Include="Core\Rendering\Texture.cpp" />
     <ClCompile Include="Core\Utils\D3DUtils.cpp" />
     <ClCompile Include="Core\Utils\Debug.cpp" />
     <ClCompile Include="Core\Utils\Logger.cpp" />
@@ -159,6 +160,7 @@
     <ClInclude Include="Core\Rendering\PipelineState.h" />
     <ClInclude Include="Core\Rendering\RootSignature.h" />
     <ClInclude Include="Core\Rendering\SwapChain.h" />
+    <ClInclude Include="Core\Rendering\Texture.h" />
     <ClInclude Include="Core\Utils\D3DUtils.h" />
     <ClInclude Include="Core\Utils\Debug.h" />
     <ClInclude Include="Core\Utils\Logger.h" />

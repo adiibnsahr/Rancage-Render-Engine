@@ -72,6 +72,26 @@ bool DeviceContext::Initialize(HWND hwnd, UINT width, UINT height) {
     }
     Logger::Log(LogLevel::Info, "Model (vertex buffer) initialized");
 
+    // Inisialisasi texture (pake SRV heap baru)
+    DescriptorHeap srvHeap;
+    if (!srvHeap.Initialize(m_Device, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 1, true)) { // Shader visible true
+        Logger::Log(LogLevel::Error, "Failed to initialize SRV descriptor heap");
+        return false;
+    }
+    Logger::Log(LogLevel::Info, "SRV descriptor heap initialized");
+
+    if (!m_Texture.Initialize(m_Device.Get(), m_CommandQueue.GetCommandList().Get(), srvHeap, "dummy/path/to/texture.png")) {
+        Logger::Log(LogLevel::Error, "Texture initialization failed");
+        return false;
+    }
+    Logger::Log(LogLevel::Info, "Texture initialized");
+
+    // Execute command list untuk texture upload
+    m_CommandQueue.GetCommandList()->Close();
+    ID3D12CommandList* commandLists[] = { m_CommandQueue.GetCommandList().Get() };
+    m_CommandQueue.GetQueue()->ExecuteCommandLists(1, commandLists);
+    m_CommandQueue.WaitForFence();
+
     return true;
 }
 
@@ -144,7 +164,7 @@ bool DeviceContext::CreateDevice()
     if (SUCCEEDED(hr))
     {
         Logger::Log(LogLevel::Info, "Max supported feature level: " +
-                    FeatureLevelToString(featureLevels.MaxSupportedFeatureLevel));
+            FeatureLevelToString(featureLevels.MaxSupportedFeatureLevel));
     }
     else
     {

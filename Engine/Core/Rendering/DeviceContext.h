@@ -8,6 +8,7 @@
 #include "DescriptorHeap.h"
 #include "DepthBuffer.h"
 #include "Model.h"
+#include "Texture.h"
 
 using Microsoft::WRL::ComPtr;
 
@@ -15,6 +16,7 @@ class DeviceContext {
 public:
     DeviceContext() = default;
     ~DeviceContext() {
+        m_Texture = Texture();
         m_Model = Model();
         m_DepthBuffer = DepthBuffer();
         m_DSVHeap = DescriptorHeap();
@@ -54,4 +56,5 @@ private:
     DescriptorHeap m_DSVHeap;
     DepthBuffer m_DepthBuffer;
     Model m_Model;
+    Texture m_Texture;
 };

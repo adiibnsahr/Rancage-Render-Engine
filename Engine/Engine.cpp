@@ -32,7 +32,6 @@ int main() {
     }
     ShowWindow(hwnd, SW_SHOW);
 
-    // Cek working directory
     char buffer[MAX_PATH];
     GetCurrentDirectoryA(MAX_PATH, buffer);
     std::string workingDir = buffer;
@@ -110,6 +109,7 @@ int main() {
 
     Logger::Log(LogLevel::Info, "Vertex buffer ready (3 vertices)");
     Logger::Log(LogLevel::Info, "Index buffer ready (3 indices)");
+    Logger::Log(LogLevel::Info, "Texture ready");
 
     Logger::Log(LogLevel::Info, "Engine started");
 
