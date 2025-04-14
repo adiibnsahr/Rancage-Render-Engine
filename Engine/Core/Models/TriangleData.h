@@ -11,3 +11,12 @@ inline std::vector<Vertex> GetTriangleVertices() {
     };
     return vertices;
 }
+
+inline std::vector<UINT> GetTriangleIndices()
+{
+    std::vector<UINT> indices =
+    {
+        0, 1, 2
+    };
+    return indices;
+}

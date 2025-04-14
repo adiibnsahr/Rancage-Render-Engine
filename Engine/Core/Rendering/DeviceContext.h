@@ -13,10 +13,25 @@ using Microsoft::WRL::ComPtr;
 
 class DeviceContext {
 public:
+    DeviceContext() = default;
+    ~DeviceContext() {
+        m_Model = Model();
+        m_DepthBuffer = DepthBuffer();
+        m_DSVHeap = DescriptorHeap();
+        m_RTVHeap = DescriptorHeap();
+        m_SwapChain = SwapChain();
+        m_PipelineState = PipelineState();
+        m_RootSignature = RootSignature();
+        m_CommandQueue = CommandQueue();
+        m_Device.Reset();
+        m_Adapter.Reset();
+        m_Factory.Reset();
+    }
     bool Initialize(HWND hwnd, UINT width, UINT height);
     ComPtr<IDXGIAdapter1> GetAdapter() const { return m_Adapter; }
     ComPtr<ID3D12Device> GetDevice() const { return m_Device; }
     ComPtr<ID3D12CommandQueue> GetCommandQueue() const { return m_CommandQueue.GetQueue(); }
+    CommandQueue& GetCommandQueueObject() { return m_CommandQueue; } // Getter baru
     ComPtr<ID3D12CommandAllocator> GetCommandAllocator() const { return m_CommandQueue.GetCommandAllocator(); }
     ComPtr<ID3D12GraphicsCommandList> GetCommandList() const { return m_CommandQueue.GetCommandList(); }
     ComPtr<IDXGISwapChain3> GetSwapChain() const { return m_SwapChain.GetSwapChain(); }

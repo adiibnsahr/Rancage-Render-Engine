@@ -32,7 +32,13 @@ int main() {
     }
     ShowWindow(hwnd, SW_SHOW);
 
+    // Cek working directory
+    char buffer[MAX_PATH];
+    GetCurrentDirectoryA(MAX_PATH, buffer);
+    std::string workingDir = buffer;
     Logger::Init("Logs/debug.log");
+    Logger::Log(LogLevel::Info, "Working directory: " + workingDir);
+
     if (!Debug::Initialize()) {
         Logger::Log(LogLevel::Error, "Initialize failed");
         return 1;
@@ -102,8 +108,8 @@ int main() {
         Logger::Log(LogLevel::Info, "Pipeline state ready");
     }
 
-    // Tambah logging untuk vertex buffer
     Logger::Log(LogLevel::Info, "Vertex buffer ready (3 vertices)");
+    Logger::Log(LogLevel::Info, "Index buffer ready (3 indices)");
 
     Logger::Log(LogLevel::Info, "Engine started");
 
@@ -113,5 +119,12 @@ int main() {
         DispatchMessage(&msg);
     }
 
+    Logger::Log(LogLevel::Info, "Ensuring GPU is idle before shutdown...");
+    deviceContext.GetCommandQueueObject().WaitForFence();
+    Logger::Log(LogLevel::Info, "GPU idle, shutting down");
+
+    Logger::Log(LogLevel::Info, "Engine shutting down");
+    Logger::Flush();
+    Logger::Shutdown();
     return 0;
 }
