@@ -70,6 +70,9 @@
     <ClCompile Include="Core\Rendering\Texture.cpp">
       <Filter>Source Files\Core\Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Rendering\Renderer.cpp">
+      <Filter>Source Files\Core\Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Utils\Logger.h">
@@ -118,6 +121,9 @@
       <Filter>Source Files\Core\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="Core\Rendering\Texture.h">
+      <Filter>Source Files\Core\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Rendering\Renderer.h">
       <Filter>Source Files\Core\Rendering</Filter>
     </ClInclude>
   </ItemGroup>

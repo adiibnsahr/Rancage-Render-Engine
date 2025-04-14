@@ -2,6 +2,7 @@
 #include "Core/Utils/Logger.h"
 #include "Core/Rendering/DeviceContext.h"
 #include "Core/Utils/StringUtils.h"
+#include "Core/Rendering/Renderer.h"
 #include <Windows.h>
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
@@ -46,6 +47,13 @@ int main() {
     DeviceContext deviceContext;
     if (!deviceContext.Initialize(hwnd, width, height)) {
         Logger::Log(LogLevel::Error, "Device context initialization failed");
+        return 1;
+    }
+
+    Renderer renderer;
+    if (!renderer.Initialize(&deviceContext))
+    {
+        Logger::Log(LogLevel::Error, "Renderer initialization failed");
         return 1;
     }
 
