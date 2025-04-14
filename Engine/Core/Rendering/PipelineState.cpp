@@ -3,8 +3,7 @@
 #include <d3dx12.h>
 #include <d3dcompiler.h>
 
-bool PipelineState::Initialize(ComPtr<ID3D12Device> device, ComPtr<ID3D12RootSignature> rootSignature)
-{
+bool PipelineState::Initialize(ComPtr<ID3D12Device> device, ComPtr<ID3D12RootSignature> rootSignature) {
     if (!device) {
         Logger::Log(LogLevel::Error, "Device is null when creating pipeline state");
         return false;
@@ -14,52 +13,42 @@ bool PipelineState::Initialize(ComPtr<ID3D12Device> device, ComPtr<ID3D12RootSig
         return false;
     }
 
-    // Compile vertex shader dari file
     ComPtr<ID3DBlob> vertexShader;
     ComPtr<ID3DBlob> errorBlob;
     Logger::Log(LogLevel::Info, "Compiling vertex shader from file...");
     HRESULT hr = D3DCompileFromFile(L"Shaders/VertexShader.hlsl", nullptr, nullptr, "main", "vs_5_0", 0, 0, &vertexShader, &errorBlob);
-    if (FAILED(hr))
-    {
-        if (errorBlob)
-        {
+    if (FAILED(hr)) {
+        if (errorBlob) {
             Logger::Log(LogLevel::Error, "Failed to compile vertex shader: " +
                 std::string(static_cast<const char*>(errorBlob->GetBufferPointer())));
         }
-        else
-        {
+        else {
             Logger::Log(LogLevel::Error, "Failed to compile vertex shader: HRESULT " + std::to_string(hr));
         }
         return false;
     }
     Logger::Log(LogLevel::Info, "Vertex shader compiled");
 
-    // Compile pixel shader dari file
     ComPtr<ID3DBlob> pixelShader;
     Logger::Log(LogLevel::Info, "Compiling pixel shader from file...");
     hr = D3DCompileFromFile(L"Shaders/PixelShader.hlsl", nullptr, nullptr, "main", "ps_5_0", 0, 0, &pixelShader, &errorBlob);
-    if (FAILED(hr))
-    {
-        if (errorBlob)
-        {
+    if (FAILED(hr)) {
+        if (errorBlob) {
             Logger::Log(LogLevel::Error, "Failed to compile pixel shader: " +
                 std::string(static_cast<const char*>(errorBlob->GetBufferPointer())));
         }
-        else
-        {
+        else {
             Logger::Log(LogLevel::Error, "Failed to compile pixel shader: HRESULT " + std::to_string(hr));
         }
         return false;
     }
     Logger::Log(LogLevel::Info, "Pixel shader compiled");
 
-    // Define input layout (vertex format)
     D3D12_INPUT_ELEMENT_DESC inputLayout[] = {
         { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
         { "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
     };
 
-    // Define pipeline state
     D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc = {};
     psoDesc.InputLayout = { inputLayout, _countof(inputLayout) };
     psoDesc.pRootSignature = rootSignature.Get();
@@ -78,7 +67,6 @@ bool PipelineState::Initialize(ComPtr<ID3D12Device> device, ComPtr<ID3D12RootSig
     psoDesc.DSVFormat = DXGI_FORMAT_D32_FLOAT;
     psoDesc.SampleDesc.Count = 1;
 
-    // Create pipeline state
     Logger::Log(LogLevel::Info, "Creating pipeline state...");
     hr = device->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&m_PipelineState));
     if (FAILED(hr)) {
@@ -87,5 +75,5 @@ bool PipelineState::Initialize(ComPtr<ID3D12Device> device, ComPtr<ID3D12RootSig
     }
     Logger::Log(LogLevel::Info, "Pipeline state created");
 
-	return true;
+    return true;
 }

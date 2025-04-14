@@ -1,5 +1,5 @@
 #include "DeviceContext.h"
-#include <Windows.h> // Buat WideCharToMultiByte
+#include <Windows.h>
 #include "../Utils/StringUtils.h"
 #include "../Utils/Logger.h"
 #include "../Utils/D3DUtils.h"
@@ -18,61 +18,59 @@ bool DeviceContext::Initialize(HWND hwnd, UINT width, UINT height) {
     }
     Logger::Log(LogLevel::Info, "Adapter selected");
 
-    if (!CreateDevice())
-    {
+    if (!CreateDevice()) {
         Logger::Log(LogLevel::Error, "Failed to create device");
         return false;
     }
     Logger::Log(LogLevel::Info, "Device created");
 
-    if (!m_CommandQueue.Initialize(m_Device, m_PipelineState.GetPipelineState()))
-    {
-        Logger::Log(LogLevel::Error, "Failed to initialize command queue");
-        return false;
-    }
-    Logger::Log(LogLevel::Info, "Command queue initialized");
-
-    if (!m_SwapChain.Initialize(hwnd, m_Factory, m_CommandQueue.GetQueue(), width, height))
-    {
-        Logger::Log(LogLevel::Error, "Failed to initialize swap chain");
-        return false;
-    }
-    Logger::Log(LogLevel::Info, "Swap chain initialized");
-
-    if (!m_RTVHeap.Initialize(m_Device, D3D12_DESCRIPTOR_HEAP_TYPE_RTV, 2))
-    {
-        Logger::Log(LogLevel::Error, "Failed to initialize RTV descriptor heap");
-        return false;
-    }
-    Logger::Log(LogLevel::Info, "RTV Descriptor heap initialized");
-
-    if (!m_DSVHeap.Initialize(m_Device, D3D12_DESCRIPTOR_HEAP_TYPE_DSV, 1))
-    {
-        Logger::Log(LogLevel::Error, "Failed to initialize DSV descriptor heap");
-        return false;
-    }
-    Logger::Log(LogLevel::Info, "DSV Descriptor heap initialized");
-
-    if (!m_DepthBuffer.Initialize(m_Device, m_DSVHeap, width, height))
-    {
-        Logger::Log(LogLevel::Error, "Failed to initialize depth buffer");
-        return false;
-    }
-    Logger::Log(LogLevel::Info, "Depth buffer initialized");
-
-    if (!m_RootSignature.Initialize(m_Device))
-    {
+    if (!m_RootSignature.Initialize(m_Device)) {
         Logger::Log(LogLevel::Error, "Failed to initialize root signature");
         return false;
     }
     Logger::Log(LogLevel::Info, "Root signature initialized");
 
-    if (!m_PipelineState.Initialize(m_Device, m_RootSignature.GetRootSignature()))
-    {
+    if (!m_PipelineState.Initialize(m_Device, m_RootSignature.GetRootSignature())) {
         Logger::Log(LogLevel::Error, "Failed to initialize pipeline state");
         return false;
     }
     Logger::Log(LogLevel::Info, "Pipeline state initialized");
+
+    if (!m_CommandQueue.Initialize(m_Device, m_PipelineState.GetPipelineState())) {
+        Logger::Log(LogLevel::Error, "Failed to initialize command queue");
+        return false;
+    }
+    Logger::Log(LogLevel::Info, "Command queue initialized");
+
+    if (!m_SwapChain.Initialize(hwnd, m_Factory, m_CommandQueue.GetQueue(), width, height)) {
+        Logger::Log(LogLevel::Error, "Failed to initialize swap chain");
+        return false;
+    }
+    Logger::Log(LogLevel::Info, "Swap chain initialized");
+
+    if (!m_RTVHeap.Initialize(m_Device, D3D12_DESCRIPTOR_HEAP_TYPE_RTV, 2)) {
+        Logger::Log(LogLevel::Error, "Failed to initialize RTV descriptor heap");
+        return false;
+    }
+    Logger::Log(LogLevel::Info, "RTV Descriptor heap initialized");
+
+    if (!m_DSVHeap.Initialize(m_Device, D3D12_DESCRIPTOR_HEAP_TYPE_DSV, 1)) {
+        Logger::Log(LogLevel::Error, "Failed to initialize DSV descriptor heap");
+        return false;
+    }
+    Logger::Log(LogLevel::Info, "DSV Descriptor heap initialized");
+
+    if (!m_DepthBuffer.Initialize(m_Device, m_DSVHeap, width, height)) {
+        Logger::Log(LogLevel::Error, "Failed to initialize depth buffer");
+        return false;
+    }
+    Logger::Log(LogLevel::Info, "Depth buffer initialized");
+
+    if (!m_Model.Initialize(m_Device, m_CommandQueue.GetCommandList(), m_CommandQueue, m_CommandQueue.GetCommandAllocator())) {
+        Logger::Log(LogLevel::Error, "Failed to initialize model (vertex buffer)");
+        return false;
+    }
+    Logger::Log(LogLevel::Info, "Model (vertex buffer) initialized");
 
     return true;
 }

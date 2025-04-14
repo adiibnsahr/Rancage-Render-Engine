@@ -137,6 +137,7 @@
     <ClCompile Include="Core\Rendering\DepthBuffer.cpp" />
     <ClCompile Include="Core\Rendering\DescriptorHeap.cpp" />
     <ClCompile Include="Core\Rendering\DeviceContext.cpp" />
+    <ClCompile Include="Core\Rendering\Model.cpp" />
     <ClCompile Include="Core\Rendering\PipelineState.cpp" />
     <ClCompile Include="Core\Rendering\RootSignature.cpp" />
     <ClCompile Include="Core\Rendering\SwapChain.cpp" />
@@ -147,10 +148,14 @@
     <ClCompile Include="Engine.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Core\Math\Matrix.h" />
+    <ClInclude Include="Core\Math\Vector.h" />
+    <ClInclude Include="Core\Models\TriangleData.h" />
     <ClInclude Include="Core\Rendering\CommandQueue.h" />
     <ClInclude Include="Core\Rendering\DepthBuffer.h" />
     <ClInclude Include="Core\Rendering\DescriptorHeap.h" />
     <ClInclude Include="Core\Rendering\DeviceContext.h" />
+    <ClInclude Include="Core\Rendering\Model.h" />
     <ClInclude Include="Core\Rendering\PipelineState.h" />
     <ClInclude Include="Core\Rendering\RootSignature.h" />
     <ClInclude Include="Core\Rendering\SwapChain.h" />

@@ -11,9 +11,6 @@
     <Filter Include="Source Files\Core\Rendering">
       <UniqueIdentifier>{16579f2a-e4cf-4bc0-a2ec-13a1482902bc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Core\Scene">
-      <UniqueIdentifier>{4fd99e52-4487-481b-a640-0a34f8a68563}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Core\Math">
       <UniqueIdentifier>{83f3b068-f470-4641-9f93-5c9af9cd86a2}</UniqueIdentifier>
     </Filter>
@@ -22,6 +19,12 @@
     </Filter>
     <Filter Include="Source Files\Shaders">
       <UniqueIdentifier>{4d528759-8816-487e-8ed4-43c19ec8d9bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Models">
+      <UniqueIdentifier>{605befde-6129-4e92-a293-6616bd3d8a52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Scenes">
+      <UniqueIdentifier>{4fd99e52-4487-481b-a640-0a34f8a68563}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -61,6 +64,9 @@
     <ClCompile Include="Core\Rendering\PipelineState.cpp">
       <Filter>Source Files\Core\Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Rendering\Model.cpp">
+      <Filter>Source Files\Core\Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Utils\Logger.h">
@@ -94,6 +100,18 @@
       <Filter>Source Files\Core\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="Core\Rendering\PipelineState.h">
+      <Filter>Source Files\Core\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Models\TriangleData.h">
+      <Filter>Source Files\Core\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Math\Vector.h">
+      <Filter>Source Files\Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Math\Matrix.h">
+      <Filter>Source Files\Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Rendering\Model.h">
       <Filter>Source Files\Core\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
