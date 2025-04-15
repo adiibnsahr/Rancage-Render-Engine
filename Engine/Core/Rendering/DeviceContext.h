@@ -40,6 +40,7 @@ public:
     ComPtr<ID3D12DescriptorHeap> GetRTVHeap() const { return m_RTVHeap.GetHeap(); }
     DescriptorHeap& GetRTVHeapObject() { return m_RTVHeap; }
     ComPtr<ID3D12DescriptorHeap> GetDSVHeap() const { return m_DSVHeap.GetHeap(); }
+    DescriptorHeap& GetDSVHeapObject() { return m_DSVHeap; }
     ComPtr<ID3D12Resource> GetDepthBuffer() const { return m_DepthBuffer.GetDepthBuffer(); }
     ComPtr<ID3D12RootSignature> GetRootSignature() const { return m_RootSignature.GetRootSignature(); }
     ComPtr<ID3D12PipelineState> GetPipelineState() const { return m_PipelineState.GetPipelineState(); }

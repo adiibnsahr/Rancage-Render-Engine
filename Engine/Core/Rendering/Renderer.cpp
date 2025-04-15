@@ -12,6 +12,7 @@ bool Renderer::Initialize(DeviceContext* deviceContext)
 	m_DeviceContext = deviceContext;
 	GetBuffers();
 	CreateRenderTargetViews();
+	CreateDepthStencilView();
 
 	Logger::Log(LogLevel::Info, "Renderer initialized (buffers retrieved)");
 	return true;
@@ -50,4 +51,11 @@ void Renderer::CreateRenderTargetViews()
 		m_DeviceContext->GetDevice()->CreateRenderTargetView(m_RenderTargets[i].Get(), nullptr, m_RTVHandles[i]);
 		Logger::Log(LogLevel::Info, "Render target view created for back buffer " + std::to_string(i));
 	}
+}
+
+void Renderer::CreateDepthStencilView()
+{
+	// Ambil DSV handle dari DSV heap
+	m_DSVHandle = m_DeviceContext->GetDSVHeap()->GetCPUDescriptorHandleForHeapStart();
+	Logger::Log(LogLevel::Info, "Depth stencil view retrieved");
 }
