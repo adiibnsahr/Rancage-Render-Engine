@@ -44,6 +44,7 @@ public:
     ComPtr<ID3D12Resource> GetDepthBuffer() const { return m_DepthBuffer.GetDepthBuffer(); }
     ComPtr<ID3D12RootSignature> GetRootSignature() const { return m_RootSignature.GetRootSignature(); }
     ComPtr<ID3D12PipelineState> GetPipelineState() const { return m_PipelineState.GetPipelineState(); }
+    Texture& GetTexture() { return m_Texture; }
 private:
     bool QueryAdapter();
     bool CreateDevice();

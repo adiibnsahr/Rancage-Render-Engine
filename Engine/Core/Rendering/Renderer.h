@@ -15,6 +15,7 @@ public:
 	void GetBuffers(); // Langkah 17
 	void CreateRenderTargetViews(); // langkah 18
 	void CreateDepthStencilView(); // Langkah 19
+	void CreateShaderResourceViews(); // Langkah 20
 
 private:
 	DeviceContext* m_DeviceContext = nullptr;
@@ -22,4 +23,5 @@ private:
 	ComPtr<ID3D12Resource> m_RenderTargets[FrameCount];
 	D3D12_CPU_DESCRIPTOR_HANDLE m_RTVHandles[FrameCount];
 	D3D12_CPU_DESCRIPTOR_HANDLE m_DSVHandle;
+	D3D12_CPU_DESCRIPTOR_HANDLE m_SRVHandle;
 };

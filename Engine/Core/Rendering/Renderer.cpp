@@ -13,6 +13,7 @@ bool Renderer::Initialize(DeviceContext* deviceContext)
 	GetBuffers();
 	CreateRenderTargetViews();
 	CreateDepthStencilView();
+	CreateShaderResourceViews();
 
 	Logger::Log(LogLevel::Info, "Renderer initialized (buffers retrieved)");
 	return true;
@@ -58,4 +59,10 @@ void Renderer::CreateDepthStencilView()
 	// Ambil DSV handle dari DSV heap
 	m_DSVHandle = m_DeviceContext->GetDSVHeap()->GetCPUDescriptorHandleForHeapStart();
 	Logger::Log(LogLevel::Info, "Depth stencil view retrieved");
+}
+
+void Renderer::CreateShaderResourceViews()
+{
+	m_SRVHandle = m_DeviceContext->GetTexture().GetSRV();
+	Logger::Log(LogLevel::Info, "Shader resource view retrieved for texture");
 }
