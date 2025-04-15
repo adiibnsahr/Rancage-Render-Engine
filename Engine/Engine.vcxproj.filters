@@ -5,25 +5,25 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Source Files\Core">
-      <UniqueIdentifier>{fc21ba7e-32ac-43fd-bacc-668c6fadd68b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Core\Rendering">
-      <UniqueIdentifier>{16579f2a-e4cf-4bc0-a2ec-13a1482902bc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Core\Math">
-      <UniqueIdentifier>{83f3b068-f470-4641-9f93-5c9af9cd86a2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Core\Utils">
-      <UniqueIdentifier>{8475a327-1132-47bf-ba9c-6abe6d70a951}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Shaders">
       <UniqueIdentifier>{4d528759-8816-487e-8ed4-43c19ec8d9bb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Core\Models">
+    <Filter Include="Source Files\--[Outdated]--">
+      <UniqueIdentifier>{fc21ba7e-32ac-43fd-bacc-668c6fadd68b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\--[Outdated]--\Rendering">
+      <UniqueIdentifier>{16579f2a-e4cf-4bc0-a2ec-13a1482902bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\--[Outdated]--\Math">
+      <UniqueIdentifier>{83f3b068-f470-4641-9f93-5c9af9cd86a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\--[Outdated]--\Utils">
+      <UniqueIdentifier>{8475a327-1132-47bf-ba9c-6abe6d70a951}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\--[Outdated]--\Models">
       <UniqueIdentifier>{605befde-6129-4e92-a293-6616bd3d8a52}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Core\Scenes">
+    <Filter Include="Source Files\--[Outdated]--\Scenes">
       <UniqueIdentifier>{4fd99e52-4487-481b-a640-0a34f8a68563}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -31,101 +31,6 @@
     <ClCompile Include="Engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Utils\Logger.cpp">
-      <Filter>Source Files\Core\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Utils\Debug.cpp">
-      <Filter>Source Files\Core\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Rendering\DeviceContext.cpp">
-      <Filter>Source Files\Core\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Utils\StringUtils.cpp">
-      <Filter>Source Files\Core\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Utils\D3DUtils.cpp">
-      <Filter>Source Files\Core\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Rendering\CommandQueue.cpp">
-      <Filter>Source Files\Core\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Rendering\SwapChain.cpp">
-      <Filter>Source Files\Core\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Rendering\DescriptorHeap.cpp">
-      <Filter>Source Files\Core\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Rendering\DepthBuffer.cpp">
-      <Filter>Source Files\Core\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Rendering\RootSignature.cpp">
-      <Filter>Source Files\Core\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Rendering\PipelineState.cpp">
-      <Filter>Source Files\Core\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Rendering\Model.cpp">
-      <Filter>Source Files\Core\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Rendering\Texture.cpp">
-      <Filter>Source Files\Core\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Rendering\Renderer.cpp">
-      <Filter>Source Files\Core\Rendering</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Core\Utils\Logger.h">
-      <Filter>Source Files\Core\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Utils\Debug.h">
-      <Filter>Source Files\Core\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Rendering\DeviceContext.h">
-      <Filter>Source Files\Core\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Utils\StringUtils.h">
-      <Filter>Source Files\Core\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Utils\D3DUtils.h">
-      <Filter>Source Files\Core\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Rendering\CommandQueue.h">
-      <Filter>Source Files\Core\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Rendering\SwapChain.h">
-      <Filter>Source Files\Core\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Rendering\DescriptorHeap.h">
-      <Filter>Source Files\Core\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Rendering\DepthBuffer.h">
-      <Filter>Source Files\Core\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Rendering\RootSignature.h">
-      <Filter>Source Files\Core\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Rendering\PipelineState.h">
-      <Filter>Source Files\Core\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Models\TriangleData.h">
-      <Filter>Source Files\Core\Models</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Math\Vector.h">
-      <Filter>Source Files\Core\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Math\Matrix.h">
-      <Filter>Source Files\Core\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Rendering\Model.h">
-      <Filter>Source Files\Core\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Rendering\Texture.h">
-      <Filter>Source Files\Core\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Rendering\Renderer.h">
-      <Filter>Source Files\Core\Rendering</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shaders\VertexShader.hlsl">
