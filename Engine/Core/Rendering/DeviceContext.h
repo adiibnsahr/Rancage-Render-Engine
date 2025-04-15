@@ -38,6 +38,7 @@ public:
     ComPtr<ID3D12GraphicsCommandList> GetCommandList() const { return m_CommandQueue.GetCommandList(); }
     ComPtr<IDXGISwapChain3> GetSwapChain() const { return m_SwapChain.GetSwapChain(); }
     ComPtr<ID3D12DescriptorHeap> GetRTVHeap() const { return m_RTVHeap.GetHeap(); }
+    DescriptorHeap& GetRTVHeapObject() { return m_RTVHeap; }
     ComPtr<ID3D12DescriptorHeap> GetDSVHeap() const { return m_DSVHeap.GetHeap(); }
     ComPtr<ID3D12Resource> GetDepthBuffer() const { return m_DepthBuffer.GetDepthBuffer(); }
     ComPtr<ID3D12RootSignature> GetRootSignature() const { return m_RootSignature.GetRootSignature(); }

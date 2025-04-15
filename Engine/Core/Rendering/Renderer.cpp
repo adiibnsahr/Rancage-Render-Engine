@@ -11,6 +11,7 @@ bool Renderer::Initialize(DeviceContext* deviceContext)
 
 	m_DeviceContext = deviceContext;
 	GetBuffers();
+	CreateRenderTargetViews();
 
 	Logger::Log(LogLevel::Info, "Renderer initialized (buffers retrieved)");
 	return true;
@@ -28,5 +29,25 @@ void Renderer::GetBuffers()
 			return;
 		}
 		Logger::Log(LogLevel::Info, "Back buffer " + std::to_string(i) + " retrieved");
+	}
+}
+
+void Renderer::CreateRenderTargetViews()
+{
+	// Membuat RTVs untuk setiap back buffer
+	for (UINT i = 0; i < FrameCount; i++)
+	{
+		if (!m_RenderTargets[i])
+		{
+			Logger::Log(LogLevel::Error, "Render target " + std::to_string(i) + " is null");
+			return;
+		}
+
+		// Ambil CPU handle dari RTV heap
+		m_RTVHandles[i] = m_DeviceContext->GetRTVHeapObject().GetCPUHandle(i); // Menggunakan fungsi dari DescriptorHeap
+
+		// Buat RTV
+		m_DeviceContext->GetDevice()->CreateRenderTargetView(m_RenderTargets[i].Get(), nullptr, m_RTVHandles[i]);
+		Logger::Log(LogLevel::Info, "Render target view created for back buffer " + std::to_string(i));
 	}
 }
