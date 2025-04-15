@@ -47,16 +47,25 @@
     <Filter Include="Source Files\Core\src\Utils">
       <UniqueIdentifier>{6db57246-60b3-4534-8104-5d16c9d26e9b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Core\include\Graphics">
+      <UniqueIdentifier>{3d940aa9-ea79-4289-aee8-0cb6f0b43d6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\src\Graphics">
+      <UniqueIdentifier>{e368d916-b372-4957-a38a-1a2f1510426d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Engine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Core\src\Core\Debug.cpp">
       <Filter>Source Files\Core\src\Core</Filter>
     </ClCompile>
     <ClCompile Include="Core\src\Utils\Logger.cpp">
       <Filter>Source Files\Core\src\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\src\Graphics\Device.cpp">
+      <Filter>Source Files\Core\src\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\src\Core\Application.cpp">
+      <Filter>Source Files\Core\src\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -76,6 +85,12 @@
     </ClInclude>
     <ClInclude Include="Core\include\Utils\Logger.h">
       <Filter>Source Files\Core\include\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\include\Graphics\Device.h">
+      <Filter>Source Files\Core\include\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\include\Core\Application.h">
+      <Filter>Source Files\Core\include\Core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

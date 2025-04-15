@@ -111,7 +111,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>d3d12.lib;dxgi.lib;d3dcompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../Engine/Core/;../Dependencies/DX12Headers\directx;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)include;../Dependencies/DX12Headers\directx;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -131,13 +131,14 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>d3d12.lib;dxgi.lib;d3dcompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../Engine/Core/;../Dependencies/DX12Headers\directx;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)include;../Dependencies/DX12Headers\directx;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Core\src\Core\Application.cpp" />
     <ClCompile Include="Core\src\Core\Debug.cpp" />
+    <ClCompile Include="Core\src\Graphics\Device.cpp" />
     <ClCompile Include="Core\src\Utils\Logger.cpp" />
-    <ClCompile Include="Engine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shaders\PixelShader.hlsl">
@@ -154,7 +155,9 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Core\include\Core\Application.h" />
     <ClInclude Include="Core\include\Core\Debug.h" />
+    <ClInclude Include="Core\include\Graphics\Device.h" />
     <ClInclude Include="Core\include\Utils\Logger.h" />
     <ClInclude Include="Logger.h" />
   </ItemGroup>

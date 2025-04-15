@@ -2,6 +2,23 @@
 
 Rancage Render Engine adalah proyek render engine berbasis DirectX 12 (C++) dengan editor berbasis C# WPF. Tujuan utama adalah membangun engine yang mampu merender model 3D kompleks seperti Sponza dengan performa tinggi dan fitur modern (PBR, deferred rendering, dll.). Proyek ini dikembangkan secara bertahap, dengan setiap langkah didokumentasikan untuk memudahkan pengembangan dan kolaborasi.
 
+## Versi 0.0.0.2: Setup DX12 Device
+
+**Tanggal**: 15 April 2025  
+**Deskripsi**: Menambahkan inisialisasi DXGI factory, query adapters, dan pembuatan D3D12 device. Kelas `Application` mengatur inisialisasi debug layer dan device.
+
+### Fitur
+- Membuat DXGI factory dengan debug support.
+- Memilih hardware adapter yang support D3D12 (skip software adapter).
+- Membuat D3D12 device dengan feature level 11.0.
+- Logging untuk setiap langkah dan error handling.
+
+### Catatan
+- Device siap untuk langkah berikutnya (swap chain, command queue).
+- Error handling memastikan hanya hardware adapter yang dipilih.
+- Device sekarang memilih adapter dengan dedicated VRAM tertinggi untuk performa optimal (misalnya, NVIDIA GPU pada laptop dual GPU).
+- Mendukung fallback ke integrated GPU kalau discrete GPU gagal.
+
 ## Versi 0.0.0.1: Setup Debug Layer dan Logger
 
 **Tanggal**: 15 April 2025  
