@@ -26,10 +26,37 @@
     <Filter Include="Source Files\--[Outdated]--\Scenes">
       <UniqueIdentifier>{4fd99e52-4487-481b-a640-0a34f8a68563}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Core">
+      <UniqueIdentifier>{727c50a1-4dc7-486b-93c7-6b366b17fcdb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\include">
+      <UniqueIdentifier>{d439b971-2c07-44df-bf9d-2b9ae6d82fe6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\src">
+      <UniqueIdentifier>{7c3cb168-375f-4785-aad7-1ccc912e3a99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\include\Core">
+      <UniqueIdentifier>{a10341f2-78bf-48c0-9d61-ec6ffa1ebc61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\include\Utils">
+      <UniqueIdentifier>{3e939b6f-e813-4942-83f6-f33d76b2b809}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\src\Core">
+      <UniqueIdentifier>{b72c89b4-8340-465c-abfa-7d69ddc85251}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\src\Utils">
+      <UniqueIdentifier>{6db57246-60b3-4534-8104-5d16c9d26e9b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\src\Core\Debug.cpp">
+      <Filter>Source Files\Core\src\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\src\Utils\Logger.cpp">
+      <Filter>Source Files\Core\src\Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -39,5 +66,16 @@
     <FxCompile Include="Shaders\PixelShader.hlsl">
       <Filter>Source Files\Shaders</Filter>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Logger.h">
+      <Filter>Source Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\include\Core\Debug.h">
+      <Filter>Source Files\Core\include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\include\Utils\Logger.h">
+      <Filter>Source Files\Core\include\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
