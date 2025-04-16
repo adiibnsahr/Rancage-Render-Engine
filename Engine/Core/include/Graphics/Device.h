@@ -5,6 +5,8 @@
 #include "../Core/include/Graphics/Command.h"
 #include "../Core/include/Graphics/SwapChain.h"
 #include "../Core/include/Resources/DepthBuffer.h"
+#include "../Core/include/Graphics/RootSignature.h"
+#include "../Core/include/Graphics/PipelineState.h"
 
 namespace Graphics
 {
@@ -21,6 +23,9 @@ namespace Graphics
         ID3D12DescriptorHeap* GetRTVHeap() const { return m_RTVHeap.Get(); }
         ID3D12DescriptorHeap* GetDSVHeap() const { return m_DSVHeap.Get(); }
         DepthBuffer& GetDepthBuffer() { return m_DepthBuffer; }
+        RootSignature& GetRootSignature() { return m_RootSignature; }
+        PipelineState& GetPipelineState() { return m_PipelineState; }
+        ID3D12Resource* GetConstantBuffer() const { return m_ConstantBuffer.Get(); }
         ID3D12Fence* GetFence() const { return m_Fence.Get(); }
         UINT64 GetFenceValue() const { return m_FenceValue; }
         HANDLE GetFenceEvent() const { return m_FenceEvent; }
@@ -28,6 +33,8 @@ namespace Graphics
         void WaitForFence();
         void CreateRenderTargetViews();
         void CreateDepthStencilView();
+        void CreateConstantBuffer();
+        void UpdateConstantBuffer();
 
     private:
         Microsoft::WRL::ComPtr<IDXGIFactory6> m_Factory;
@@ -38,6 +45,9 @@ namespace Graphics
         Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> m_RTVHeap;
         Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> m_DSVHeap;
         DepthBuffer m_DepthBuffer;
+        RootSignature m_RootSignature;
+        PipelineState m_PipelineState;
+        Microsoft::WRL::ComPtr<ID3D12Resource> m_ConstantBuffer;
         Microsoft::WRL::ComPtr<ID3D12Fence> m_Fence;
         UINT64 m_FenceValue = 0;
         HANDLE m_FenceEvent = nullptr;

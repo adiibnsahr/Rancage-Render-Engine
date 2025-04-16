@@ -4,27 +4,26 @@ Rancage Render Engine adalah proyek render engine berbasis DirectX 12 (C++) deng
 
 ## Status Saat Ini
 
-- **Versi**: 0.0.0.6
+- **Versi**: 0.0.0.7
 - **Fitur**:
-  - Window stabil (Escape, timeout 10 detik), menampilkan warna biru.
+  - Window stabil (Escape, timeout 10 detik), render segitiga putih dengan latar biru.
   - Device pake RTX 3060 (5996 MB VRAM).
-  - Command queue, allocator, list, SwapChain, RTV, DSV, Fence siap.
-  - Depth buffer siap untuk Z-buffer.
+  - Command queue, allocator, list, SwapChain, RTV, DSV, Fence, RootSignature, PipelineState siap.
+  - Depth buffer aktif untuk Z-buffer.
   - Logger console-only, redirect ke `engine.txt`.
 - **Exit Code**: 0 (Debug configuration).
 - **Direct3D 12 Steps Tercover**:
-  - **Inisialisasi** (11/16): Enable Debug Functionality (dimatikan), Create DXGI Factory, Query Adapters, Create Device, Create Command Queue, Create Swap Chain, Create Descriptor Heaps, Create Depth Buffer, Create Fence, Create Command Allocator, Create Command Lists.
+  - **Inisialisasi** (13/16): Enable Debug Functionality (dimatikan), Create DXGI Factory, Query Adapters, Create Device, Create Command Queue, Create Swap Chain, Create Descriptor Heaps, Create Depth Buffer, Create Fence, Serialize Root Signature, Create Pipeline State, Create Command Allocator, Create Command Lists.
   - **Setup Rendering** (3/5): Get Buffers, Create Render Target Views, Create Depth Stencil View.
   - **Rendering Loop** (7/8): Wait for Fence, Prepare Command List, Wrap up Command List, Execute Command List, Signal Fence, Queue Present, Loop kembali.
 - **Rencana**:
-  - **Versi 0.0.0.7**: Serialize Root Signature, Create Pipeline State, tambah `IPipelineComponent.h`, `Vector3.h`, `Matrix4.h`.
   - **Versi 0.0.0.8**: Create Vertex Buffer, Create Index Buffer, Submit Draw Calls, tambah `IRenderable.h`.
   - **Versi 0.0.0.9**: Create Textures, Create Shader Res Views, Upload Resources, tambah `IAssetLoader.h`.
   - AsyncLogger sebelum Sponza untuk high volume log.
 
 ## Perjalanan Pengembangan
 
-Proyek mengikuti langkah inisialisasi Direct3D 12, dengan penyesuaian untuk stabilitas dan kemudahan debug. Berikut progres hingga versi 0.0.0.6:
+Proyek mengikuti langkah inisialisasi Direct3D 12, dengan penyesuaian untuk stabilitas dan kemudahan debug. Berikut progres hingga versi 0.0.0.7:
 
 ### Versi 0.0.0.1: Inisialisasi Window dan Debug Layer
 
@@ -120,6 +119,20 @@ Proyek mengikuti langkah inisialisasi Direct3D 12, dengan penyesuaian untuk stab
   - Exit code 0, window tetap menampilkan warna biru.
   - Siap untuk root signature dan pipeline.
 
+### Versi 0.0.0.7: Root Signature dan Pipeline State
+
+- **Tujuan**: Siapkan shader pipeline untuk render geometri.
+- **Fitur** (Direct3D 12 Steps):
+  - **Serialize Root Signature**: Bikin root signature untuk MVP matrix.
+  - **Create Pipeline State**: Bikin PSO dengan vertex/pixel shader sederhana.
+  - Tambah `IPipelineComponent.h` untuk `RootSignature.h`, `PipelineState.h`.
+  - Tambah `Vector3.h`, `Matrix4.h`, `MathUtils.h` untuk transformasi.
+  - Render segitiga putih menggunakan vertex buffer sementara.
+  - Logger console-only, log tambahan (`Root signature created`, `Pipeline state created`, `Drawing triangle`).
+- **Status**:
+  - Exit code 0, window menampilkan segitiga putih dengan latar biru.
+  - Siap untuk vertex buffer dan index buffer.
+
 ## Struktur File
 
 Berikut file utama dan fungsinya:
@@ -128,7 +141,7 @@ Berikut file utama dan fungsinya:
 
 - **include/Core/Application.h, src/Core/Application.cpp**:
   - Kelas utama, inisialisasi `Window`, `Device`, loop `Run`.
-  - Fitur: Timeout 10 detik, try-catch, NVIDIA Optimus hint, clear RTV, clear DSV, present.
+  - Fitur: Timeout 10 detik, try-catch, NVIDIA Optimus hint, clear RTV/DSV, draw triangle, present.
 - **include/Core/Window.h, src/Core/Window.cpp**:
   - Window Win32 (1280x720, "Rancage Render Engine").
   - Handle `WM_PAINT`, `WM_KEYDOWN` (Escape), `WM_DESTROY`.
@@ -140,24 +153,47 @@ Berikut file utama dan fungsinya:
 
 - **include/Graphics/Device.h, src/Graphics/Device.cpp**:
   - Kelola `ID3D12Device`, DXGI factory, pilih RTX 3060.
-  - Inisialisasi `Command`, `SwapChain`, RTV heap, DSV heap, RTV, DSV, Fence.
+  - Inisialisasi `Command`, `SwapChain`, RTV/DSV heap, RTV, DSV, Fence, RootSignature, PipelineState.
 - **include/Graphics/Command.h, src/Graphics/Command.cpp**:
   - Kelola command queue, allocator, list (`D3D12_COMMAND_LIST_TYPE_DIRECT`).
   - Getter: `GetQueue`, `GetAllocator`, `GetList`.
 - **include/Graphics/SwapChain.h, src/Graphics/SwapChain.cpp**:
   - Kelola SwapChain (double buffer, `DXGI_FORMAT_R8G8B8A8_UNORM`).
+- **include/Graphics/RootSignature.h, src/Graphics/RootSignature.cpp**:
+  - Kelola root signature untuk shader (CBV untuk MVP).
+  - Implementasi `IPipelineComponent`.
+- **include/Graphics/PipelineState.h, src/Graphics/PipelineState.cpp**:
+  - Kelola PSO dengan vertex/pixel shader.
+  - Implementasi `IPipelineComponent`.
 
 ### Resources
 
 - **include/Resources/DepthBuffer.h, src/Resources/DepthBuffer.cpp**:
   - Kelola depth/stencil buffer (`DXGI_FORMAT_D32_FLOAT`).
-  - Implementasi `IResource` untuk modularitas.
+  - Implementasi `IResource`.
 
 ### Interfaces
 
 - **include/Interfaces/IResource.h**:
-  - Base class untuk resource (`DepthBuffer`, nanti `VertexBuffer`, dll.).
-  - Method: `Create`, `GetResource`, `Release`.
+  - Base class untuk resource (`DepthBuffer`, nanti `VertexBuffer`).
+- **include/Interfaces/IPipelineComponent.h**:
+  - Base class untuk pipeline (`RootSignature`, `PipelineState`).
+
+### Math
+
+- **include/Math/Vector3.h, src/Math/Vector3.cpp**:
+  - Vektor 3D untuk posisi vertex.
+- **include/Math/Matrix4.h, src/Math/Matrix4.cpp**:
+  - Matriks 4x4 untuk transformasi MVP.
+- **include/Math/MathUtils.h, src/Math/MathUtils.cpp**:
+  - Placeholder untuk helper math.
+
+### Assets
+
+- **assets/shaders/VertexShader.hlsl**:
+  - Vertex shader untuk transformasi MVP.
+- **assets/shaders/PixelShader.hlsl**:
+  - Pixel shader untuk warna putih.
 
 ### Utils
 
@@ -195,4 +231,4 @@ Berikut file utama dan fungsinya:
 - Console-only logger stabil, cukup untuk render awal.
 - AsyncLogger direncanakan untuk skalabilitas saat render Sponza.
 - File di `EngineCore/include` dan `EngineCore/src` modular.
-- Fokus berikutnya: Depth buffer dan pipeline untuk rendering geometri.
+- Fokus berikutnya: Vertex buffer dan index buffer untuk geometri kompleks.

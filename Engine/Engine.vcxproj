@@ -140,11 +140,28 @@
     <ClCompile Include="Core\src\Core\Window.cpp" />
     <ClCompile Include="Core\src\Graphics\Command.cpp" />
     <ClCompile Include="Core\src\Graphics\Device.cpp" />
+    <ClCompile Include="Core\src\Graphics\PipelineState.cpp" />
+    <ClCompile Include="Core\src\Graphics\RootSignature.cpp" />
     <ClCompile Include="Core\src\Graphics\SwapChain.cpp" />
+    <ClCompile Include="Core\src\Math\MathUtils.cpp" />
+    <ClCompile Include="Core\src\Math\Matrix4.cpp" />
+    <ClCompile Include="Core\src\Math\Vector3.cpp" />
     <ClCompile Include="Core\src\Resources\DepthBuffer.cpp" />
     <ClCompile Include="Core\src\Utils\Logger.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="Core\assets\shaders\PixelShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Core\assets\shaders\VertexShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
     <FxCompile Include="Shaders\PixelShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
@@ -164,8 +181,14 @@
     <ClInclude Include="Core\include\Core\Window.h" />
     <ClInclude Include="Core\include\Graphics\Command.h" />
     <ClInclude Include="Core\include\Graphics\Device.h" />
+    <ClInclude Include="Core\include\Graphics\PipelineState.h" />
+    <ClInclude Include="Core\include\Graphics\RootSignature.h" />
     <ClInclude Include="Core\include\Graphics\SwapChain.h" />
+    <ClInclude Include="Core\include\Interfaces\IPipelineComponent.h" />
     <ClInclude Include="Core\include\Interfaces\IResource.h" />
+    <ClInclude Include="Core\include\Math\MathUtils.h" />
+    <ClInclude Include="Core\include\Math\Matrix4.h" />
+    <ClInclude Include="Core\include\Math\Vector3.h" />
     <ClInclude Include="Core\include\Resources\DepthBuffer.h" />
     <ClInclude Include="Core\include\Utils\Logger.h" />
     <ClInclude Include="Logger.h" />

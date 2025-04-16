@@ -1,5 +1,6 @@
 #include "../Core/include/Graphics/Device.h"
 #include "../Core/include/Utils/Logger.h"
+#include "../Core/include/Math/Matrix4.h"
 #include <comdef.h>
 #include <d3dx12.h>
 
@@ -83,7 +84,7 @@ namespace Graphics
 
         // Create RTV Descriptor Heap
         D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc = {};
-        rtvHeapDesc.NumDescriptors = 2; // 2 buffers (double buffering)
+        rtvHeapDesc.NumDescriptors = 2;
         rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
         rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
         hr = m_Device->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&m_RTVHeap));
@@ -97,7 +98,7 @@ namespace Graphics
 
         // Create DSV Descriptor Heap
         D3D12_DESCRIPTOR_HEAP_DESC dsvHeapDesc = {};
-        dsvHeapDesc.NumDescriptors = 1; // 1 depth buffer
+        dsvHeapDesc.NumDescriptors = 1;
         dsvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
         dsvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
         hr = m_Device->CreateDescriptorHeap(&dsvHeapDesc, IID_PPV_ARGS(&m_DSVHeap));
@@ -115,6 +116,24 @@ namespace Graphics
             Logger::Log(LogLevel::Error, "Failed to create depth buffer");
             return false;
         }
+
+        // Create Root Signature
+        if (!m_RootSignature.Configure(m_Device.Get()))
+        {
+            Logger::Log(LogLevel::Error, "Failed to create root signature");
+            return false;
+        }
+
+        // Create Pipeline State
+        m_PipelineState.SetRootSignature(m_RootSignature.GetRootSignature());
+        if (!m_PipelineState.Configure(m_Device.Get()))
+        {
+            Logger::Log(LogLevel::Error, "Failed to create pipeline state");
+            return false;
+        }
+
+        // Create Constant Buffer
+        CreateConstantBuffer();
 
         // Create Fence
         hr = m_Device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_Fence));
@@ -169,8 +188,81 @@ namespace Graphics
         dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
         dsvDesc.Texture2D.MipSlice = 0;
 
-        m_Device->CreateDepthStencilView(m_DepthBuffer.GetResource(), &dsvDesc, m_DSVHeap->GetCPUDescriptorHandleForHeapStart());
+        D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = m_DSVHeap->GetCPUDescriptorHandleForHeapStart();
+        m_Device->CreateDepthStencilView(m_DepthBuffer.GetResource(), &dsvDesc, dsvHandle);
+        m_DepthBuffer.SetDSV(dsvHandle); // Set via setter
         Logger::Log(LogLevel::Info, "Depth stencil view created");
+    }
+
+    void Device::CreateConstantBuffer()
+    {
+        CD3DX12_HEAP_PROPERTIES heapProperties(D3D12_HEAP_TYPE_UPLOAD);
+        CD3DX12_RESOURCE_DESC bufferDesc = CD3DX12_RESOURCE_DESC::Buffer(256); // Align to 256 bytes
+        HRESULT hr = m_Device->CreateCommittedResource(
+            &heapProperties,
+            D3D12_HEAP_FLAG_NONE,
+            &bufferDesc,
+            D3D12_RESOURCE_STATE_GENERIC_READ,
+            nullptr,
+            IID_PPV_ARGS(&m_ConstantBuffer));
+        if (FAILED(hr))
+        {
+            _com_error err(hr);
+            Logger::Log(LogLevel::Error, "Failed to create constant buffer: %s", err.ErrorMessage());
+            return;
+        }
+        Logger::Log(LogLevel::Info, "Constant buffer created");
+    }
+
+    void Device::UpdateConstantBuffer()
+    {
+        // Model matrix (identity)
+        Math::Matrix4 model = Math::Matrix4::Identity();
+
+        // View matrix: kamera di z=2, ngeliat ke origin
+        Math::Matrix4 view = Math::Matrix4::CreateLookAt(
+            Math::Vector3(0.0f, 0.0f, 2.0f), // Lebih deket dari -5
+            Math::Vector3(0.0f, 0.0f, 0.0f),
+            Math::Vector3(0.0f, 1.0f, 0.0f));
+
+        // Projection matrix: 60-degree FOV
+        Math::Matrix4 proj = Math::Matrix4::CreatePerspective(
+            3.14159f / 3.0f, // 60 degrees
+            1280.0f / 720.0f,
+            0.1f,
+            10.0f); // Far plane lebih deket
+
+        // MVP = model * view * proj
+        Math::Matrix4 mvp = model * view * proj;
+
+        // Transpose untuk HLSL (column-major)
+        Math::Matrix4 mvpTransposed;
+        for (int i = 0; i < 4; ++i)
+            for (int j = 0; j < 4; ++j)
+                mvpTransposed.m[i][j] = mvp.m[j][i];
+
+        // Log MVP
+        Logger::Log(LogLevel::Info, "MVP Matrix: [%.2f, %.2f, %.2f, %.2f]",
+            mvpTransposed.m[0][0], mvpTransposed.m[0][1], mvpTransposed.m[0][2], mvpTransposed.m[0][3]);
+        Logger::Log(LogLevel::Info, "            [%.2f, %.2f, %.2f, %.2f]",
+            mvpTransposed.m[1][0], mvpTransposed.m[1][1], mvpTransposed.m[1][2], mvpTransposed.m[1][3]);
+        Logger::Log(LogLevel::Info, "            [%.2f, %.2f, %.2f, %.2f]",
+            mvpTransposed.m[2][0], mvpTransposed.m[2][1], mvpTransposed.m[2][2], mvpTransposed.m[2][3]);
+        Logger::Log(LogLevel::Info, "            [%.2f, %.2f, %.2f, %.2f]",
+            mvpTransposed.m[3][0], mvpTransposed.m[3][1], mvpTransposed.m[3][2], mvpTransposed.m[3][3]);
+
+        void* mappedData;
+        CD3DX12_RANGE readRange(0, 0);
+        HRESULT hr = m_ConstantBuffer->Map(0, &readRange, &mappedData);
+        if (FAILED(hr))
+        {
+            _com_error err(hr);
+            Logger::Log(LogLevel::Error, "Failed to map constant buffer: %s", err.ErrorMessage());
+            return;
+        }
+        memcpy(mappedData, &mvpTransposed, sizeof(Math::Matrix4));
+        m_ConstantBuffer->Unmap(0, nullptr);
+        Logger::Log(LogLevel::Info, "Constant buffer updated");
     }
 
     void Device::SignalFence(ID3D12CommandQueue* queue)

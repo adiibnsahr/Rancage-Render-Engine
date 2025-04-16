@@ -1,7 +1,7 @@
 #include "../Core/include/Resources/DepthBuffer.h"
 #include "../Core/include/Utils/Logger.h"
-#include <d3dx12.h>
 #include <comdef.h>
+#include <d3dx12.h>
 
 namespace Graphics
 {
@@ -40,11 +40,9 @@ namespace Graphics
         clearValue.DepthStencil.Depth = 1.0f;
         clearValue.DepthStencil.Stencil = 0;
 
-        // Buat variable untuk heap properties
         CD3DX12_HEAP_PROPERTIES heapProperties(D3D12_HEAP_TYPE_DEFAULT);
-
         HRESULT hr = device->CreateCommittedResource(
-            &heapProperties, // Gunakan variable l-value
+            &heapProperties,
             D3D12_HEAP_FLAG_NONE,
             &depthDesc,
             D3D12_RESOURCE_STATE_DEPTH_WRITE,

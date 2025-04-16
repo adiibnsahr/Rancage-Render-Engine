@@ -62,6 +62,18 @@
     <Filter Include="Source Files\Core\src\Resources">
       <UniqueIdentifier>{c8a8b137-7591-4d3e-ba35-f3c13681a617}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Core\include\Math">
+      <UniqueIdentifier>{5a36fcc1-8c1a-45fa-8bad-129f515591d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\src\Math">
+      <UniqueIdentifier>{c14130bb-2676-4d6c-9f96-0bf2d2666882}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\assets">
+      <UniqueIdentifier>{c5a4ade3-27ed-4775-911b-ed9de3c7e8a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\assets\shaders">
+      <UniqueIdentifier>{60d75420-bda2-450a-93c9-8a2de83963aa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\src\Core\Debug.cpp">
@@ -88,6 +100,21 @@
     <ClCompile Include="Core\src\Resources\DepthBuffer.cpp">
       <Filter>Source Files\Core\src\Resources</Filter>
     </ClCompile>
+    <ClCompile Include="Core\src\Graphics\RootSignature.cpp">
+      <Filter>Source Files\Core\src\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\src\Graphics\PipelineState.cpp">
+      <Filter>Source Files\Core\src\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\src\Math\Vector3.cpp">
+      <Filter>Source Files\Core\src\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\src\Math\Matrix4.cpp">
+      <Filter>Source Files\Core\src\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\src\Math\MathUtils.cpp">
+      <Filter>Source Files\Core\src\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shaders\VertexShader.hlsl">
@@ -95,6 +122,12 @@
     </FxCompile>
     <FxCompile Include="Shaders\PixelShader.hlsl">
       <Filter>Source Files\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Core\assets\shaders\VertexShader.hlsl">
+      <Filter>Source Files\Core\assets\shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Core\assets\shaders\PixelShader.hlsl">
+      <Filter>Source Files\Core\assets\shaders</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
@@ -127,6 +160,24 @@
     </ClInclude>
     <ClInclude Include="Core\include\Resources\DepthBuffer.h">
       <Filter>Source Files\Core\include\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\include\Interfaces\IPipelineComponent.h">
+      <Filter>Source Files\Core\include\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\include\Graphics\RootSignature.h">
+      <Filter>Source Files\Core\include\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\include\Graphics\PipelineState.h">
+      <Filter>Source Files\Core\include\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\include\Math\Vector3.h">
+      <Filter>Source Files\Core\include\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\include\Math\Matrix4.h">
+      <Filter>Source Files\Core\include\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\include\Math\MathUtils.h">
+      <Filter>Source Files\Core\include\Math</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

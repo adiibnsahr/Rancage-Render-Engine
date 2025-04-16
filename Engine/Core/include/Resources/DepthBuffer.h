@@ -15,7 +15,8 @@ namespace Graphics
         ID3D12Resource* GetResource() const override { return m_DepthStencilBuffer.Get(); }
         void Release() override;
 
-        D3D12_CPU_DESCRIPTOR_HANDLE GetDSV() const { return m_DSVHandle; }
+        D3D12_CPU_DESCRIPTOR_HANDLE GetDSV() const { return m_DSVHandle; } // Balik ke by value
+        void SetDSV(D3D12_CPU_DESCRIPTOR_HANDLE handle) { m_DSVHandle = handle; } // Tambah setter
 
     private:
         Microsoft::WRL::ComPtr<ID3D12Resource> m_DepthStencilBuffer;
