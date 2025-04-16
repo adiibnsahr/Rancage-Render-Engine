@@ -3,6 +3,7 @@
 #include "../Core/include/Core/Window.h"
 #include "../Core/include/Utils/Logger.h"
 #include "../Core/include/Math/Vector3.h"
+#include "../Core/include/Graphics/Triangle.h"
 #include <exception>
 #include <chrono>
 #include <comdef.h>
@@ -42,6 +43,10 @@ namespace Core
             return false;
         }
 
+        // Tambah segitiga ke renderables
+        m_Renderables.push_back(std::make_unique<Graphics::Triangle>(m_Device.GetDevice()));
+        Logger::Log(LogLevel::Info, "Renderables initialized");
+
         return true;
     }
 
@@ -50,58 +55,6 @@ namespace Core
         Logger::Log(LogLevel::Info, "Application running");
         try
         {
-            // Hardcoded triangle vertices
-            Math::Vector3 vertices[] = {
-                Math::Vector3(0.0f,  0.5f, 0.5f), // Top
-                Math::Vector3(0.5f, -0.5f, 0.5f), // Bottom right
-                Math::Vector3(-0.5f, -0.5f, 0.5f)  // Bottom left
-            };
-
-            // Log vertex
-            Logger::Log(LogLevel::Info, "Vertex 0: (%.2f, %.2f, %.2f)", vertices[0].x, vertices[0].y, vertices[0].z);
-            Logger::Log(LogLevel::Info, "Vertex 1: (%.2f, %.2f, %.2f)", vertices[1].x, vertices[1].y, vertices[1].z);
-            Logger::Log(LogLevel::Info, "Vertex 2: (%.2f, %.2f, %.2f)", vertices[2].x, vertices[2].y, vertices[2].z);
-
-            // Create vertex buffer
-            Microsoft::WRL::ComPtr<ID3D12Resource> vertexBuffer;
-            {
-                CD3DX12_HEAP_PROPERTIES heapProperties(D3D12_HEAP_TYPE_UPLOAD);
-                CD3DX12_RESOURCE_DESC bufferDesc = CD3DX12_RESOURCE_DESC::Buffer(sizeof(vertices));
-                HRESULT hr = m_Device.GetDevice()->CreateCommittedResource(
-                    &heapProperties,
-                    D3D12_HEAP_FLAG_NONE,
-                    &bufferDesc,
-                    D3D12_RESOURCE_STATE_GENERIC_READ,
-                    nullptr,
-                    IID_PPV_ARGS(&vertexBuffer));
-                if (FAILED(hr))
-                {
-                    _com_error err(hr);
-                    Logger::Log(LogLevel::Error, "Failed to create vertex buffer: %s", err.ErrorMessage());
-                    return;
-                }
-
-                void* mappedData;
-                CD3DX12_RANGE readRange(0, 0);
-                hr = vertexBuffer->Map(0, &readRange, &mappedData);
-                if (FAILED(hr))
-                {
-                    _com_error err(hr);
-                    Logger::Log(LogLevel::Error, "Failed to map vertex buffer: %s", err.ErrorMessage());
-                    return;
-                }
-                memcpy(mappedData, vertices, sizeof(vertices));
-
-                // Log mapped data buat debug
-                Math::Vector3* mappedVertices = (Math::Vector3*)mappedData;
-                Logger::Log(LogLevel::Info, "Mapped Vertex 0: (%.2f, %.2f, %.2f)", mappedVertices[0].x, mappedVertices[0].y, mappedVertices[0].z);
-                Logger::Log(LogLevel::Info, "Mapped Vertex 1: (%.2f, %.2f, %.2f)", mappedVertices[1].x, mappedVertices[1].y, mappedVertices[1].z);
-                Logger::Log(LogLevel::Info, "Mapped Vertex 2: (%.2f, %.2f, %.2f)", mappedVertices[2].x, mappedVertices[2].y, mappedVertices[2].z);
-
-                vertexBuffer->Unmap(0, nullptr);
-                Logger::Log(LogLevel::Info, "Vertex buffer created");
-            }
-
             auto start = std::chrono::steady_clock::now();
             while (m_Window.ProcessMessages())
             {
@@ -171,19 +124,11 @@ namespace Core
                 m_Device.GetCommand().GetList()->RSSetScissorRects(1, &scissorRect);
                 Logger::Log(LogLevel::Info, "Viewport and scissor rect set");
 
-                // Set vertex buffer
-                D3D12_VERTEX_BUFFER_VIEW vbv;
-                vbv.BufferLocation = vertexBuffer->GetGPUVirtualAddress();
-                vbv.SizeInBytes = sizeof(vertices);
-                vbv.StrideInBytes = sizeof(Math::Vector3);
-                m_Device.GetCommand().GetList()->IASetVertexBuffers(0, 1, &vbv);
-
-                // Set primitive topology
-                m_Device.GetCommand().GetList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-                // Draw triangle
-                m_Device.GetCommand().GetList()->DrawInstanced(3, 1, 0, 0);
-                Logger::Log(LogLevel::Info, "Drawing triangle");
+                // Render semua renderables
+                for (const auto& renderable : m_Renderables)
+                {
+                    renderable->Render(m_Device.GetCommand().GetList());
+                }
 
                 // Close command list
                 hr = m_Device.GetCommand().GetList()->Close();

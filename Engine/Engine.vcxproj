@@ -143,6 +143,7 @@
     <ClCompile Include="Core\src\Graphics\PipelineState.cpp" />
     <ClCompile Include="Core\src\Graphics\RootSignature.cpp" />
     <ClCompile Include="Core\src\Graphics\SwapChain.cpp" />
+    <ClCompile Include="Core\src\Graphics\Triangle.cpp" />
     <ClCompile Include="Core\src\Math\MathUtils.cpp" />
     <ClCompile Include="Core\src\Math\Matrix4.cpp" />
     <ClCompile Include="Core\src\Math\Vector3.cpp" />
@@ -184,7 +185,9 @@
     <ClInclude Include="Core\include\Graphics\PipelineState.h" />
     <ClInclude Include="Core\include\Graphics\RootSignature.h" />
     <ClInclude Include="Core\include\Graphics\SwapChain.h" />
+    <ClInclude Include="Core\include\Graphics\Triangle.h" />
     <ClInclude Include="Core\include\Interfaces\IPipelineComponent.h" />
+    <ClInclude Include="Core\include\Interfaces\IRenderable.h" />
     <ClInclude Include="Core\include\Interfaces\IResource.h" />
     <ClInclude Include="Core\include\Math\MathUtils.h" />
     <ClInclude Include="Core\include\Math\Matrix4.h" />

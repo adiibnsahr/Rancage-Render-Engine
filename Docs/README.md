@@ -4,21 +4,23 @@ Rancage Render Engine adalah proyek render engine berbasis DirectX 12 (C++) deng
 
 ## Status Saat Ini
 
-- **Versi**: 0.0.0.7
+- **Versi**: 0.0.0.8
 - **Fitur**:
-  - Window stabil (Escape, timeout 10 detik), render segitiga putih dengan latar biru.
+  - Window stabil (Escape, timeout 10 detik), render segitiga putih (ukuran besar) dengan latar biru.
   - Device pake RTX 3060 (5996 MB VRAM).
   - Command queue, allocator, list, SwapChain, RTV, DSV, Fence, RootSignature, PipelineState siap.
   - Depth buffer aktif untuk Z-buffer.
+  - Vertex buffer dan index buffer untuk segitiga (3 vertex, 3 indeks).
+  - Abstraksi `IRenderable` untuk rendering modular, implementasi awal di `Triangle`.
   - Logger console-only, redirect ke `engine.txt`.
 - **Exit Code**: 0 (Debug configuration).
 - **Direct3D 12 Steps Tercover**:
-  - **Inisialisasi** (13/16): Enable Debug Functionality (dimatikan), Create DXGI Factory, Query Adapters, Create Device, Create Command Queue, Create Swap Chain, Create Descriptor Heaps, Create Depth Buffer, Create Fence, Serialize Root Signature, Create Pipeline State, Create Command Allocator, Create Command Lists.
+  - **Inisialisasi** (15/16): Enable Debug Functionality (dimatikan), Create DXGI Factory, Query Adapters, Create Device, Create Command Queue, Create Swap Chain, Create Descriptor Heaps, Create Depth Buffer, Create Fence, Serialize Root Signature, Create Pipeline State, Create Command Allocator, Create Command Lists, Create Vertex Buffer, Create Index Buffer.
   - **Setup Rendering** (3/5): Get Buffers, Create Render Target Views, Create Depth Stencil View.
-  - **Rendering Loop** (7/8): Wait for Fence, Prepare Command List, Wrap up Command List, Execute Command List, Signal Fence, Queue Present, Loop kembali.
+  - **Rendering Loop** (8/8): Wait for Fence, Prepare Command List, Wrap up Command List, Execute Command List, Signal Fence, Queue Present, Loop kembali, Submit Draw Calls.
 - **Rencana**:
-  - **Versi 0.0.0.8**: Create Vertex Buffer, Create Index Buffer, Submit Draw Calls, tambah `IRenderable.h`.
-  - **Versi 0.0.0.9**: Create Textures, Create Shader Res Views, Upload Resources, tambah `IAssetLoader.h`.
+  - **Versi 0.0.0.9**: Transformasi dinamis (rotasi, translasi) via model matrix, tambah `IAssetLoader.h`.
+  - **Versi 0.0.1.0**: Create Textures, Create Shader Resource Views, Upload Resources.
   - AsyncLogger sebelum Sponza untuk high volume log.
 
 ## Perjalanan Pengembangan
@@ -133,6 +135,25 @@ Proyek mengikuti langkah inisialisasi Direct3D 12, dengan penyesuaian untuk stab
   - Exit code 0, window menampilkan segitiga putih dengan latar biru.
   - Siap untuk vertex buffer dan index buffer.
 
+### Versi 0.0.0.8: Vertex Buffer, Index Buffer, dan Abstraksi Renderable
+
+- **Tujuan**: Lengkapi pipeline geometri dengan vertex/index buffer dan struktur modular.
+- **Fitur** (Direct3D 12 Steps):
+  - **Create Vertex Buffer**: Buffer permanen untuk 3 vertex segitiga.
+  - **Create Index Buffer**: Buffer untuk 3 indeks (`DXGI_FORMAT_R32_UINT`).
+  - **Submit Draw Calls**: Ganti `DrawInstanced` ke `DrawIndexedInstanced`.
+  - Tambah `IRenderable.h` sebagai interface untuk rendering objek.
+  - Tambah `Triangle.h/cpp` sebagai implementasi `IRenderable` untuk segitiga.
+  - Update `Application` untuk kelola list `IRenderable` (saat ini 1 segitiga).
+  - Logger console-only, log tambahan (`Vertex buffer created`, `Index buffer created`, `Rendering triangle`).
+- **Masalah**:
+  - Segitiga besar karena kamera dekat (z=2) dan FOV lebar (60°).
+- **Solusi**:
+  - Pertahankan ukuran besar untuk visibilitas, rencanakan transformasi dinamis di versi berikutnya.
+- **Status**:
+  - Exit code 0, window menampilkan segitiga putih besar dengan latar biru.
+  - Pipeline geometri dasar hampir selesai, siap untuk transformasi dinamis.
+
 ## Struktur File
 
 Berikut file utama dan fungsinya:
@@ -154,6 +175,7 @@ Berikut file utama dan fungsinya:
 - **include/Graphics/Device.h, src/Graphics/Device.cpp**:
   - Kelola `ID3D12Device`, DXGI factory, pilih RTX 3060.
   - Inisialisasi `Command`, `SwapChain`, RTV/DSV heap, RTV, DSV, Fence, RootSignature, PipelineState.
+  - Update constant buffer untuk MVP matrix.
 - **include/Graphics/Command.h, src/Graphics/Command.cpp**:
   - Kelola command queue, allocator, list (`D3D12_COMMAND_LIST_TYPE_DIRECT`).
   - Getter: `GetQueue`, `GetAllocator`, `GetList`.
@@ -165,6 +187,11 @@ Berikut file utama dan fungsinya:
 - **include/Graphics/PipelineState.h, src/Graphics/PipelineState.cpp**:
   - Kelola PSO dengan vertex/pixel shader.
   - Implementasi `IPipelineComponent`.
+- **include/Graphics/IRenderable.h**:
+  - Interface untuk objek renderable (fungsi `Render` dan `Update`).
+- **include/Graphics/Triangle.h, src/Graphics/Triangle.cpp**:
+  - Kelas segitiga, implementasi `IRenderable`.
+  - Kelola vertex buffer (3 vertex) dan index buffer (3 indeks).
 
 ### Resources
 
@@ -231,4 +258,4 @@ Berikut file utama dan fungsinya:
 - Console-only logger stabil, cukup untuk render awal.
 - AsyncLogger direncanakan untuk skalabilitas saat render Sponza.
 - File di `EngineCore/include` dan `EngineCore/src` modular.
-- Fokus berikutnya: Vertex buffer dan index buffer untuk geometri kompleks.
+- Fokus berikutnya: Transformasi dinamis untuk animasi segitiga, lalu tekstur untuk material.

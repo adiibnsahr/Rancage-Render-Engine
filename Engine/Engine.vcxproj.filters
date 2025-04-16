@@ -115,6 +115,9 @@
     <ClCompile Include="Core\src\Math\MathUtils.cpp">
       <Filter>Source Files\Core\src\Math</Filter>
     </ClCompile>
+    <ClCompile Include="Core\src\Graphics\Triangle.cpp">
+      <Filter>Source Files\Core\src\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shaders\VertexShader.hlsl">
@@ -178,6 +181,12 @@
     </ClInclude>
     <ClInclude Include="Core\include\Math\MathUtils.h">
       <Filter>Source Files\Core\include\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\include\Interfaces\IRenderable.h">
+      <Filter>Source Files\Core\include\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\include\Graphics\Triangle.h">
+      <Filter>Source Files\Core\include\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
