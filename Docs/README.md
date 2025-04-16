@@ -57,6 +57,18 @@ Berikut adalah ringkasan versi pengembangan dari awal hingga saat ini:
   - Redirect console output ke `Logs\engine.txt` sebagai workaround.
   - Rencanakan AsyncLogger untuk skalabilitas di masa depan.
 
+### Versi 0.0.0.4: Descriptor Heaps dan Render Target Views
+
+- **Tujuan**: Siapkan render target untuk output visual.
+- **Fitur** (Direct3D 12 Steps):
+  - **Create Descriptor Heaps**: Bikin RTV heap untuk 2 buffer (`D3D12_DESCRIPTOR_HEAP_TYPE_RTV`).
+  - **Get Buffers**: Ambil back buffer dari `SwapChain`.
+  - **Create Render Target Views**: Setup RTV untuk double buffering.
+  - Logger console-only tetap stabil, log tambahan (`RTV descriptor heap created`, `Render target view created`).
+- **Status**:
+  - Exit code 0, siap untuk clear screen atau rendering sederhana.
+  - Window, Device, Command, SwapChain, RTV jalan mulus.
+
 ## Struktur File
 
 Berikut adalah file utama di proyek dan fungsinya:
@@ -99,17 +111,24 @@ Berikut adalah file utama di proyek dan fungsinya:
 
 ## Status Saat Ini
 
-- **Versi**: 0.0.0.3
+- **Versi**: 0.0.0.4
 - **Fitur**:
-  - Window stabil, bisa ditutup via Escape atau timeout 10 detik.
-  - Device menggunakan RTX 3060 (5996 MB VRAM).
-  - Command queue dan SwapChain siap untuk rendering.
-  - Logger console-only, redirect ke `Logs\engine.txt` untuk simpan log.
-- **Exit Code**: 0 (stabil di Debug configuration).
+  - Window stabil (Escape, timeout 10 detik).
+  - Device pake RTX 3060 (5996 MB VRAM).
+  - Command queue, allocator, list, SwapChain, RTV siap.
+  - Logger console-only, redirect ke `engine.txt`.
+- **Exit Code**: 0 (Debug configuration).
+- **Direct3D 12 Steps Tercover**:
+  - Enable Debug Functionality (dimatikan).
+  - Create DXGI Factory, Query Adapters, Create Device.
+  - Create Command Queue, Allocator, Lists.
+  - Create Swap Chain, Descriptor Heaps, Render Target Views.
 - **Rencana**:
-  - Tambah render target view (RTV) untuk mulai rendering (misal clear screen ke warna).
-  - Implementasi AsyncLogger sebelum load Sponza untuk handle high volume log.
-  - Setup pipeline dan rendering scene Sponza.
+  - Clear screen ke warna (misal biru) untuk tes visual.
+  - Create Depth Buffer, Depth Stencil View (DSV).
+  - Create Fence untuk sync GPU-CPU.
+  - AsyncLogger sebelum Sponza untuk high volume log.
+  - Pipeline, vertex buffer, dll., untuk render Sponza.
 
 ## Cara Menjalankan
 

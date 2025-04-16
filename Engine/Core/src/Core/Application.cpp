@@ -20,7 +20,7 @@ namespace Core
 
     bool Application::Initialize()
     {
-        Logger::Init(L"Logs/engine.log");
+        Logger::Init(L"D:\\Projects\\Visual Studio\\Rancage Render Engine\\Logs\\engine.log");
         if (!Debug::Initialize())
         {
             Logger::Log(LogLevel::Error, "Failed to initialize debug layer");

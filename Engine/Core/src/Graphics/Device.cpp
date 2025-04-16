@@ -70,6 +70,44 @@ namespace Graphics
             return false;
         }
 
+        // Create RTV Descriptor Heap
+        D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc = {};
+        rtvHeapDesc.NumDescriptors = 2; // 2 buffers (double buffering)
+        rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
+        rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+        hr = m_Device->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&m_RTVHeap));
+        if (FAILED(hr))
+        {
+            _com_error err(hr);
+            Logger::Log(LogLevel::Error, "Failed to create RTV descriptor heap: %s", err.ErrorMessage());
+            return false;
+        }
+        Logger::Log(LogLevel::Info, "RTV descriptor heap created");
+
+        CreateRenderTargetViews(); // Panggil langsung setelah heap
+
         return true;
+    }
+
+    void Device::CreateRenderTargetViews()
+    {
+        D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = m_RTVHeap->GetCPUDescriptorHandleForHeapStart();
+        UINT rtvDescriptorSize = m_Device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+
+        for (UINT i = 0; i < 2; ++i)
+        {
+            Microsoft::WRL::ComPtr<ID3D12Resource> backBuffer;
+            HRESULT hr = m_SwapChain.GetSwapChain()->GetBuffer(i, IID_PPV_ARGS(&backBuffer));
+            if (FAILED(hr))
+            {
+                _com_error err(hr);
+                Logger::Log(LogLevel::Error, "Failed to get SwapChain buffer %u: %s", i, err.ErrorMessage());
+                return;
+            }
+
+            m_Device->CreateRenderTargetView(backBuffer.Get(), nullptr, rtvHandle);
+            Logger::Log(LogLevel::Info, "Render target view created for buffer %u", i);
+            rtvHandle.ptr += rtvDescriptorSize;
+        }
     }
 }
