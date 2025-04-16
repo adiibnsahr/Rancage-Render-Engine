@@ -89,6 +89,16 @@ namespace Core
                 m_Device.GetCommand().GetList()->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
                 Logger::Log(LogLevel::Info, "Clearing back buffer %u to blue", backBufferIndex);
 
+                // Clear DSV
+                m_Device.GetCommand().GetList()->ClearDepthStencilView(
+                    m_Device.GetDepthBuffer().GetDSV(),
+                    D3D12_CLEAR_FLAG_DEPTH,
+                    1.0f,
+                    0,
+                    0,
+                    nullptr);
+                Logger::Log(LogLevel::Info, "Clearing depth buffer");
+
                 // Close command list
                 hr = m_Device.GetCommand().GetList()->Close();
                 if (FAILED(hr))

@@ -2,9 +2,29 @@
 
 Rancage Render Engine adalah proyek render engine berbasis DirectX 12 (C++) dengan editor berbasis C# WPF. Tujuan utama adalah membangun engine yang mampu merender model 3D kompleks seperti Sponza dengan performa tinggi dan fitur modern (PBR, deferred rendering, dll.). Proyek ini dikembangkan secara bertahap, dengan setiap langkah didokumentasikan untuk memudahkan pengembangan dan kolaborasi.
 
+## Status Saat Ini
+
+- **Versi**: 0.0.0.6
+- **Fitur**:
+  - Window stabil (Escape, timeout 10 detik), menampilkan warna biru.
+  - Device pake RTX 3060 (5996 MB VRAM).
+  - Command queue, allocator, list, SwapChain, RTV, DSV, Fence siap.
+  - Depth buffer siap untuk Z-buffer.
+  - Logger console-only, redirect ke `engine.txt`.
+- **Exit Code**: 0 (Debug configuration).
+- **Direct3D 12 Steps Tercover**:
+  - **Inisialisasi** (11/16): Enable Debug Functionality (dimatikan), Create DXGI Factory, Query Adapters, Create Device, Create Command Queue, Create Swap Chain, Create Descriptor Heaps, Create Depth Buffer, Create Fence, Create Command Allocator, Create Command Lists.
+  - **Setup Rendering** (3/5): Get Buffers, Create Render Target Views, Create Depth Stencil View.
+  - **Rendering Loop** (7/8): Wait for Fence, Prepare Command List, Wrap up Command List, Execute Command List, Signal Fence, Queue Present, Loop kembali.
+- **Rencana**:
+  - **Versi 0.0.0.7**: Serialize Root Signature, Create Pipeline State, tambah `IPipelineComponent.h`, `Vector3.h`, `Matrix4.h`.
+  - **Versi 0.0.0.8**: Create Vertex Buffer, Create Index Buffer, Submit Draw Calls, tambah `IRenderable.h`.
+  - **Versi 0.0.0.9**: Create Textures, Create Shader Res Views, Upload Resources, tambah `IAssetLoader.h`.
+  - AsyncLogger sebelum Sponza untuk high volume log.
+
 ## Perjalanan Pengembangan
 
-Proyek mengikuti langkah inisialisasi Direct3D 12, dengan penyesuaian untuk stabilitas dan kemudahan debug. Berikut progres hingga versi 0.0.0.5:
+Proyek mengikuti langkah inisialisasi Direct3D 12, dengan penyesuaian untuk stabilitas dan kemudahan debug. Berikut progres hingga versi 0.0.0.6:
 
 ### Versi 0.0.0.1: Inisialisasi Window dan Debug Layer
 
@@ -87,6 +107,19 @@ Proyek mengikuti langkah inisialisasi Direct3D 12, dengan penyesuaian untuk stab
   - Exit code 0, window menampilkan warna biru.
   - Siap untuk depth buffer dan pipeline.
 
+### Versi 0.0.0.6: Depth Buffer dan Depth Stencil View
+
+- **Tujuan**: Siapkan Z-buffer untuk rendering geometri.
+- **Fitur** (Direct3D 12 Steps):
+  - **Create Depth Buffer**: Bikin depth/stencil texture (`DXGI_FORMAT_D32_FLOAT`).
+  - **Create Depth Stencil View**: Setup DSV untuk depth buffer.
+  - Tambah `IResource.h` sebagai base class untuk `DepthBuffer.h`.
+  - Update rendering loop untuk clear DSV.
+  - Logger console-only, log tambahan (`Depth buffer created`, `DSV created`, `Clearing depth buffer`).
+- **Status**:
+  - Exit code 0, window tetap menampilkan warna biru.
+  - Siap untuk root signature dan pipeline.
+
 ## Struktur File
 
 Berikut file utama dan fungsinya:
@@ -95,7 +128,7 @@ Berikut file utama dan fungsinya:
 
 - **include/Core/Application.h, src/Core/Application.cpp**:
   - Kelas utama, inisialisasi `Window`, `Device`, loop `Run`.
-  - Fitur: Timeout 10 detik, try-catch, NVIDIA Optimus hint, clear RTV, present.
+  - Fitur: Timeout 10 detik, try-catch, NVIDIA Optimus hint, clear RTV, clear DSV, present.
 - **include/Core/Window.h, src/Core/Window.cpp**:
   - Window Win32 (1280x720, "Rancage Render Engine").
   - Handle `WM_PAINT`, `WM_KEYDOWN` (Escape), `WM_DESTROY`.
@@ -107,12 +140,24 @@ Berikut file utama dan fungsinya:
 
 - **include/Graphics/Device.h, src/Graphics/Device.cpp**:
   - Kelola `ID3D12Device`, DXGI factory, pilih RTX 3060.
-  - Inisialisasi `Command`, `SwapChain`, RTV heap, RTV, Fence.
+  - Inisialisasi `Command`, `SwapChain`, RTV heap, DSV heap, RTV, DSV, Fence.
 - **include/Graphics/Command.h, src/Graphics/Command.cpp**:
   - Kelola command queue, allocator, list (`D3D12_COMMAND_LIST_TYPE_DIRECT`).
-  - Tambah getter: `GetQueue`, `GetAllocator`, `GetList`.
+  - Getter: `GetQueue`, `GetAllocator`, `GetList`.
 - **include/Graphics/SwapChain.h, src/Graphics/SwapChain.cpp**:
   - Kelola SwapChain (double buffer, `DXGI_FORMAT_R8G8B8A8_UNORM`).
+
+### Resources
+
+- **include/Resources/DepthBuffer.h, src/Resources/DepthBuffer.cpp**:
+  - Kelola depth/stencil buffer (`DXGI_FORMAT_D32_FLOAT`).
+  - Implementasi `IResource` untuk modularitas.
+
+### Interfaces
+
+- **include/Interfaces/IResource.h**:
+  - Base class untuk resource (`DepthBuffer`, nanti `VertexBuffer`, dll.).
+  - Method: `Create`, `GetResource`, `Release`.
 
 ### Utils
 
@@ -121,27 +166,6 @@ Berikut file utama dan fungsinya:
   - Level: `[INFO]`, `[WARNING]`, `[ERROR]`.
   - Redirect ke `Logs\engine.txt` via `Engine.exe > Logs\engine.txt`.
   - Note: File output crash, ditunda ke AsyncLogger.
-
-## Status Saat Ini
-
-- **Versi**: 0.0.0.5
-- **Fitur**:
-  - Window stabil (Escape, timeout 10 detik), menampilkan warna biru.
-  - Device pake RTX 3060 (5996 MB VRAM).
-  - Command queue, allocator, list, SwapChain, RTV, Fence siap.
-  - Logger console-only, redirect ke `engine.txt`.
-- **Exit Code**: 0 (Debug configuration).
-- **Direct3D 12 Steps Tercover**:
-  - Enable Debug Functionality (dimatikan).
-  - Create DXGI Factory, Query Adapters, Create Device.
-  - Create Command Queue, Allocator, Lists.
-  - Create Swap Chain, Descriptor Heaps, Render Target Views, Fence.
-  - Clear Render Target, Present SwapChain.
-- **Rencana**:
-  - Create Depth Buffer, Depth Stencil View (DSV) untuk Z-buffer.
-  - Setup Root Signature dan Pipeline State untuk rendering geometri.
-  - AsyncLogger sebelum Sponza untuk high volume log.
-  - Vertex buffer, index buffer, textures untuk render Sponza.
 
 ## Cara Menjalankan
 

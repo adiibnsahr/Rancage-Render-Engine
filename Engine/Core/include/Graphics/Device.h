@@ -4,6 +4,7 @@
 #include <wrl/client.h>
 #include "../Core/include/Graphics/Command.h"
 #include "../Core/include/Graphics/SwapChain.h"
+#include "../Core/include/Resources/DepthBuffer.h"
 
 namespace Graphics
 {
@@ -18,12 +19,15 @@ namespace Graphics
         Command& GetCommand() { return m_Command; }
         SwapChain& GetSwapChain() { return m_SwapChain; }
         ID3D12DescriptorHeap* GetRTVHeap() const { return m_RTVHeap.Get(); }
+        ID3D12DescriptorHeap* GetDSVHeap() const { return m_DSVHeap.Get(); }
+        DepthBuffer& GetDepthBuffer() { return m_DepthBuffer; }
         ID3D12Fence* GetFence() const { return m_Fence.Get(); }
         UINT64 GetFenceValue() const { return m_FenceValue; }
         HANDLE GetFenceEvent() const { return m_FenceEvent; }
         void SignalFence(ID3D12CommandQueue* queue);
         void WaitForFence();
         void CreateRenderTargetViews();
+        void CreateDepthStencilView();
 
     private:
         Microsoft::WRL::ComPtr<IDXGIFactory6> m_Factory;
@@ -32,6 +36,8 @@ namespace Graphics
         Command m_Command;
         SwapChain m_SwapChain;
         Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> m_RTVHeap;
+        Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> m_DSVHeap;
+        DepthBuffer m_DepthBuffer;
         Microsoft::WRL::ComPtr<ID3D12Fence> m_Fence;
         UINT64 m_FenceValue = 0;
         HANDLE m_FenceEvent = nullptr;

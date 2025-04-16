@@ -1,10 +1,14 @@
 #include "../Core/include/Graphics/Device.h"
 #include "../Core/include/Utils/Logger.h"
 #include <comdef.h>
+#include <d3dx12.h>
 
 namespace Graphics
 {
-    Device::Device() = default;
+    Device::Device() : m_DepthBuffer(1280, 720)
+    {
+    }
+
     Device::~Device()
     {
         if (m_FenceEvent)
@@ -91,6 +95,27 @@ namespace Graphics
         }
         Logger::Log(LogLevel::Info, "RTV descriptor heap created");
 
+        // Create DSV Descriptor Heap
+        D3D12_DESCRIPTOR_HEAP_DESC dsvHeapDesc = {};
+        dsvHeapDesc.NumDescriptors = 1; // 1 depth buffer
+        dsvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
+        dsvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+        hr = m_Device->CreateDescriptorHeap(&dsvHeapDesc, IID_PPV_ARGS(&m_DSVHeap));
+        if (FAILED(hr))
+        {
+            _com_error err(hr);
+            Logger::Log(LogLevel::Error, "Failed to create DSV descriptor heap: %s", err.ErrorMessage());
+            return false;
+        }
+        Logger::Log(LogLevel::Info, "DSV descriptor heap created");
+
+        // Create Depth Buffer
+        if (!m_DepthBuffer.Create(m_Device.Get()))
+        {
+            Logger::Log(LogLevel::Error, "Failed to create depth buffer");
+            return false;
+        }
+
         // Create Fence
         hr = m_Device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_Fence));
         if (FAILED(hr))
@@ -111,6 +136,7 @@ namespace Graphics
         Logger::Log(LogLevel::Info, "Fence event created");
 
         CreateRenderTargetViews();
+        CreateDepthStencilView();
         return true;
     }
 
@@ -134,6 +160,17 @@ namespace Graphics
             Logger::Log(LogLevel::Info, "Render target view created for buffer %u", i);
             rtvHandle.ptr += rtvDescriptorSize;
         }
+    }
+
+    void Device::CreateDepthStencilView()
+    {
+        D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc = {};
+        dsvDesc.Format = DXGI_FORMAT_D32_FLOAT;
+        dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
+        dsvDesc.Texture2D.MipSlice = 0;
+
+        m_Device->CreateDepthStencilView(m_DepthBuffer.GetResource(), &dsvDesc, m_DSVHeap->GetCPUDescriptorHandleForHeapStart());
+        Logger::Log(LogLevel::Info, "Depth stencil view created");
     }
 
     void Device::SignalFence(ID3D12CommandQueue* queue)
