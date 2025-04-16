@@ -1,261 +1,261 @@
 # Rancage Render Engine
 
-Rancage Render Engine adalah proyek render engine berbasis DirectX 12 (C++) dengan editor berbasis C# WPF. Tujuan utama adalah membangun engine yang mampu merender model 3D kompleks seperti Sponza dengan performa tinggi dan fitur modern (PBR, deferred rendering, dll.). Proyek ini dikembangkan secara bertahap, dengan setiap langkah didokumentasikan untuk memudahkan pengembangan dan kolaborasi.
+Rancage Render Engine adalah proyek pengembangan mesin render berbasis DirectX 12 menggunakan bahasa pemrograman C++, dilengkapi dengan editor berbasis C# WPF. Tujuan utama proyek ini adalah menciptakan mesin render yang mampu menangani model 3D kompleks seperti Sponza dengan performa tinggi dan mendukung fitur modern seperti PBR (Physically Based Rendering) dan deferred rendering. Pengembangan dilakukan secara bertahap, dengan setiap tahap didokumentasikan untuk memudahkan proses pengembangan dan kolaborasi.
 
 ## Status Saat Ini
 
-- **Versi**: 0.0.0.8
+- **Versi**: 0.0.0.9
 - **Fitur**:
-  - Window stabil (Escape, timeout 10 detik), render segitiga putih (ukuran besar) dengan latar biru.
-  - Device pake RTX 3060 (5996 MB VRAM).
-  - Command queue, allocator, list, SwapChain, RTV, DSV, Fence, RootSignature, PipelineState siap.
-  - Depth buffer aktif untuk Z-buffer.
+  - Jendela aplikasi stabil dengan resolusi 1280x720, mendukung tombol Escape untuk keluar, dan batas waktu otomatis 10 detik.
+  - Rendering segitiga putih dengan rotasi dinamis 90° per detik pada sumbu Y, menggunakan latar belakang berwarna biru.
+  - Penggunaan GPU NVIDIA GeForce RTX 3060 dengan VRAM 5996 MB.
+  - Pipeline Direct3D 12 lengkap, meliputi command queue, allocator, list, SwapChain, RTV, DSV, Fence, RootSignature, dan PipelineState.
+  - Dukungan depth buffer untuk pengujian Z-buffer.
   - Vertex buffer dan index buffer untuk segitiga (3 vertex, 3 indeks).
-  - Abstraksi `IRenderable` untuk rendering modular, implementasi awal di `Triangle`.
-  - Logger console-only, redirect ke `engine.txt`.
-- **Exit Code**: 0 (Debug configuration).
-- **Direct3D 12 Steps Tercover**:
-  - **Inisialisasi** (15/16): Enable Debug Functionality (dimatikan), Create DXGI Factory, Query Adapters, Create Device, Create Command Queue, Create Swap Chain, Create Descriptor Heaps, Create Depth Buffer, Create Fence, Serialize Root Signature, Create Pipeline State, Create Command Allocator, Create Command Lists, Create Vertex Buffer, Create Index Buffer.
+  - Abstraksi `IRenderable` untuk rendering modular, diimplementasikan pada kelas `Triangle`.
+  - Transformasi dinamis melalui model matrix untuk mendukung animasi rotasi.
+  - Pustaka matematika kustom (`Math::Matrix4`, `Math::Vector3`) untuk perhitungan matriks MVP, tanpa ketergantungan pada pustaka eksternal.
+  - Sistem logging berbasis konsol, dengan output disimpan ke `Logs\engine.txt`.
+- **Exit Code**: 0 (konfigurasi Debug, x64).
+- **Cakupan Langkah Direct3D 12**:
+  - **Inisialisasi** (15/16): Create DXGI Factory, Query Adapters, Create Device, Create Command Queue, Create Swap Chain, Create Descriptor Heaps, Create Depth Buffer, Create Fence, Serialize Root Signature, Create Pipeline State, Create Command Allocator, Create Command Lists, Create Vertex Buffer, Create Index Buffer, Enable Debug Functionality (dinonaktifkan untuk stabilitas).
   - **Setup Rendering** (3/5): Get Buffers, Create Render Target Views, Create Depth Stencil View.
   - **Rendering Loop** (8/8): Wait for Fence, Prepare Command List, Wrap up Command List, Execute Command List, Signal Fence, Queue Present, Loop kembali, Submit Draw Calls.
-- **Rencana**:
-  - **Versi 0.0.0.9**: Transformasi dinamis (rotasi, translasi) via model matrix, tambah `IAssetLoader.h`.
-  - **Versi 0.0.1.0**: Create Textures, Create Shader Resource Views, Upload Resources.
-  - AsyncLogger sebelum Sponza untuk high volume log.
+- **Rencana Pengembangan**:
+  - **Versi 0.0.1.0**: Menambahkan dukungan tekstur (format PNG/DDS), Shader Resource Views, dan pengunggahan resource.
+  - **Versi 0.1.0**: Mendukung mesh kompleks dan manajemen scene, menargetkan rendering Sponza.
+  - Mengembangkan AsyncLogger untuk menangani volume log besar sebelum rendering Sponza.
 
 ## Perjalanan Pengembangan
 
-Proyek mengikuti langkah inisialisasi Direct3D 12, dengan penyesuaian untuk stabilitas dan kemudahan debug. Berikut progres hingga versi 0.0.0.7:
+Proyek ini mengikuti tahapan inisialisasi Direct3D 12 dengan penyesuaian untuk stabilitas dan kemudahan debugging. Berikut adalah ringkasan progres hingga Versi 0.0.0.9:
 
-### Versi 0.0.0.1: Inisialisasi Window dan Debug Layer
+### Versi 0.0.0.1: Inisialisasi Jendela dan Debug Layer
 
-- **Tujuan**: Membuat window dasar menggunakan Win32 API dan menyiapkan debug layer Direct3D 12.
+- **Tujuan**: Membuat jendela dasar menggunakan Win32 API dan menyiapkan debug layer Direct3D 12.
 - **Fitur**:
-  - Window dibuat dengan resolusi 1280x720, judul "Rancage Render Engine".
-  - Menangani pesan dasar (`WM_CREATE`, `WM_PAINT`, `WM_DESTROY`) melalui `WindowProc`.
-  - Inisialisasi logger sederhana untuk mencatat ke file (`Logs/engine.log`).
-  - Setup debug layer untuk validasi Direct3D 12 (awalnya aktif).
-- **Masalah**:
-  - Crash di message loop window, exit code 1.
-  - Logger file (`wofstream`) sering putus di `[INFO]`, menyebabkan crash.
-  - Debug layer bikin aplikasi berat dan kadang crash di beberapa konfigurasi.
+  - Jendela beresolusi 1280x720 dengan judul "Rancage Render Engine".
+  - Penanganan pesan jendela (`WM_CREATE`, `WM_PAINT`, `WM_DESTROY`) melalui `WindowProc`.
+  - Sistem logging sederhana untuk mencatat ke file (`Logs/engine.log`).
+  - Aktivasi debug layer Direct3D 12 untuk validasi awal.
+- **Kendala**:
+  - Crash pada message loop jendela, menghasilkan exit code 1.
+  - Logging ke file menggunakan `wofstream` sering terputus, menyebabkan crash.
+  - Debug layer meningkatkan beban aplikasi dan menyebabkan crash pada beberapa konfigurasi.
 - **Solusi**:
-  - Tambah logging pesan window (`WM_NCCREATE`, `WM_KEYDOWN`, dll.) untuk debug.
-  - Nonaktifkan file output logger, ganti ke console-only (`std::wcout`) sementara.
-  - Matikan debug layer untuk stabilitas (`DX12 debug layer disabled`).
+  - Menambahkan logging untuk pesan jendela (`WM_NCCREATE`, `WM_KEYDOWN`, dll.) untuk debugging.
+  - Menonaktifkan output file logging, beralih ke konsol (`std::wcout`) sementara.
+  - Menonaktifkan debug layer untuk meningkatkan stabilitas.
 
 ### Versi 0.0.0.2: Inisialisasi Device
 
-- **Tujuan**: Menambahkan Direct3D 12 device untuk komunikasi dengan GPU.
+- **Tujuan**: Menyiapkan device Direct3D 12 untuk komunikasi dengan GPU.
 - **Fitur**:
-  - Membuat DXGI factory untuk enumerasi adapter.
-  - Memilih adapter dengan VRAM tertinggi (NVIDIA GeForce RTX 3060, 5996 MB).
-  - Membuat D3D12 device dengan feature level 11.0.
-  - Tambah NVIDIA Optimus hint (`NvOptimusEnablement`) untuk pastikan RTX 3060 terpilih.
-- **Masalah**:
-  - Crash window masih terjadi karena cleanup tidak terpanggil.
-  - Visual Studio kadang ikut crash karena unhandled exception.
+  - Pembuatan DXGI factory untuk enumerasi adapter.
+  - Pemilihan adapter dengan VRAM tertinggi (NVIDIA GeForce RTX 3060, 5996 MB).
+  - Pembuatan device D3D12 dengan feature level 11.0.
+  - Penambahan NVIDIA Optimus hint (`NvOptimusEnablement`) untuk memastikan pemilihan RTX 3060.
+- **Kendala**:
+  - Crash jendela karena proses cleanup tidak dipanggil.
+  - Visual Studio mengalami crash akibat unhandled exception.
 - **Solusi**:
-  - Tambah try-catch di `Application::Run` dan `main` untuk nangkap exception.
-  - Perkuat `Window::~Window` dengan `DestroyWindow` dan `UnregisterClass`.
-  - Redirect console ke `Logs\engine.txt` via `Engine.exe > Logs\engine.txt` untuk debug.
+  - Menambahkan try-catch pada `Application::Run` dan fungsi `main`.
+  - Memperkuat destruktor `Window` dengan `DestroyWindow` dan `UnregisterClass`.
+  - Mengarahkan output konsol ke `Logs\engine.txt` menggunakan `Engine.exe > Logs\engine.txt`.
 
 ### Versi 0.0.0.3: Command Queue, SwapChain, dan Stabilisasi
 
-- **Tujuan**: Menyiapkan command queue dan SwapChain untuk rendering, sambil pastikan exit code 0.
+- **Tujuan**: Menyiapkan command queue dan SwapChain untuk rendering, memastikan exit code 0.
 - **Fitur**:
-  - Tambah `Command` class untuk command queue, allocator, dan list (`D3D12_COMMAND_LIST_TYPE_DIRECT`).
-  - Tambah `SwapChain` class untuk double buffering (format `DXGI_FORMAT_R8G8B8A8_UNORM`, flip discard).
-  - Integrasi `Command` dan `SwapChain` ke `Device`, menggunakan window handle.
-  - Window stabil: support Escape key, timeout 10 detik di `Application::Run`.
-  - Logger console-only dengan redirect ke file, log lengkap (`SwapChain created`, `Application stopped`, `Window destroyed`).
-  - Tambah try-catch di `Window::ProcessMessages` untuk handle `PeekMessage`/`DispatchMessage` error.
-- **Masalah**:
-  - Upaya balik ke file logger (`wofstream`) gagal, crash lagi (exit code 1).
-  - Console-only logger stabil tapi kurang ideal untuk high volume log ke depan.
+  - Kelas `Command` untuk mengelola command queue, allocator, dan list (`D3D12_COMMAND_LIST_TYPE_DIRECT`).
+  - Kelas `SwapChain` untuk double buffering (format `DXGI_FORMAT_R8G8B8A8_UNORM`, flip discard).
+  - Integrasi `Command` dan `SwapChain` ke `Device` menggunakan window handle.
+  - Jendela stabil dengan dukungan tombol Escape dan batas waktu 10 detik pada `Application::Run`.
+  - Logging berbasis konsol dengan pengalihan ke file, mencatat informasi seperti `SwapChain created`.
+  - Penambahan try-catch pada `Window::ProcessMessages` untuk menangani error `PeekMessage`/`DispatchMessage`.
+- **Kendala**:
+  - Upaya kembali ke file logging (`wofstream`) gagal, menyebabkan crash.
+  - Logging berbasis konsol stabil namun kurang optimal untuk volume log besar.
 - **Solusi**:
-  - Tetap gunakan console-only logger untuk stabilitas.
-  - Redirect console output ke `Logs\engine.txt` sebagai workaround.
-  - Rencanakan AsyncLogger untuk skalabilitas di masa depan.
+  - Mempertahankan logging berbasis konsol untuk stabilitas.
+  - Menggunakan pengalihan ke `Logs\engine.txt` sebagai solusi sementara.
+  - Merencanakan AsyncLogger untuk skalabilitas di masa depan.
 
 ### Versi 0.0.0.4: Descriptor Heaps dan Render Target Views
 
-- **Tujuan**: Siapkan render target untuk output visual.
-- **Fitur** (Direct3D 12 Steps):
-  - **Create Descriptor Heaps**: Bikin RTV heap untuk 2 buffer (`D3D12_DESCRIPTOR_HEAP_TYPE_RTV`).
-  - **Get Buffers**: Ambil back buffer dari `SwapChain`.
-  - **Create Render Target Views**: Setup RTV untuk double buffering.
-  - Logger console-only tetap stabil, log tambahan (`RTV descriptor heap created`, `Render target view created`).
+- **Tujuan**: Menyiapkan render target untuk output visual.
+- **Fitur**:
+  - Pembuatan RTV heap untuk 2 buffer (`D3D12_DESCRIPTOR_HEAP_TYPE_RTV`).
+  - Pengambilan back buffer dari `SwapChain`.
+  - Pembuatan Render Target Views untuk double buffering.
+  - Logging berbasis konsol dengan catatan tambahan (`RTV descriptor heap created`).
 - **Status**:
-  - Exit code 0, siap untuk clear screen atau rendering sederhana.
-  - Window, Device, Command, SwapChain, RTV jalan mulus.
+  - Exit code 0, siap untuk rendering dasar.
 
 ### Versi 0.0.0.5: Fence dan Clear Screen
 
-- **Tujuan**: Tambah sync GPU-CPU dan render warna ke window.
-- **Fitur** (Direct3D 12 Steps):
-  - **Create Fence**: Bikin `ID3D12Fence` untuk sync command queue.
-  - **Clear Render Target**: Clear back buffer ke warna biru tua via RTV.
-  - **Present SwapChain**: Tampilkan buffer di window.
-  - Loop sederhana: Wait fence, clear RTV, execute command list, present.
-  - Logger console-only, log tambahan (`Fence created`, `Clearing back buffer`, `Presented back buffer`).
-- **Masalah**:
-  - Error `class "Graphics::Command" has no member "GetList"` karena `Command` kurang getter.
+- **Tujuan**: Menambahkan sinkronisasi GPU-CPU dan rendering warna ke jendela.
+- **Fitur**:
+  - Pembuatan `ID3D12Fence` untuk sinkronisasi command queue.
+  - Pembersihan back buffer ke warna biru melalui RTV.
+  - Presentasi SwapChain untuk menampilkan buffer.
+  - Loop rendering sederhana: menunggu fence, membersihkan RTV, mengeksekusi command list, presentasi.
+  - Logging berbasis konsol dengan catatan tambahan (`Fence created`, `Clearing back buffer`).
+- **Kendala**:
+  - Kesalahan karena kelas `Command` tidak memiliki getter `GetList`.
 - **Solusi**:
-  - Tambah `GetQueue`, `GetAllocator`, `GetList` di `Command.h` dan `Command.cpp`.
-  - Pastikan command list dibuat dan ditutup saat inisialisasi.
+  - Menambahkan `GetQueue`, `GetAllocator`, `GetList` pada `Command.h` dan `Command.cpp`.
+  - Memastikan command list dibuat dan ditutup saat inisialisasi.
 - **Status**:
-  - Exit code 0, window menampilkan warna biru.
-  - Siap untuk depth buffer dan pipeline.
+  - Exit code 0, jendela menampilkan warna biru.
 
 ### Versi 0.0.0.6: Depth Buffer dan Depth Stencil View
 
-- **Tujuan**: Siapkan Z-buffer untuk rendering geometri.
-- **Fitur** (Direct3D 12 Steps):
-  - **Create Depth Buffer**: Bikin depth/stencil texture (`DXGI_FORMAT_D32_FLOAT`).
-  - **Create Depth Stencil View**: Setup DSV untuk depth buffer.
-  - Tambah `IResource.h` sebagai base class untuk `DepthBuffer.h`.
-  - Update rendering loop untuk clear DSV.
-  - Logger console-only, log tambahan (`Depth buffer created`, `DSV created`, `Clearing depth buffer`).
+- **Tujuan**: Menyiapkan Z-buffer untuk rendering geometri.
+- **Fitur**:
+  - Pembuatan depth/stencil texture (`DXGI_FORMAT_D32_FLOAT`).
+  - Pembuatan Depth Stencil View untuk depth buffer.
+  - Kelas `IResource.h` sebagai base class untuk `DepthBuffer.h`.
+  - Pembaruan loop rendering untuk membersihkan DSV.
+  - Logging berbasis konsol dengan catatan tambahan (`Depth buffer created`, `DSV created`).
 - **Status**:
-  - Exit code 0, window tetap menampilkan warna biru.
-  - Siap untuk root signature dan pipeline.
+  - Exit code 0, siap untuk pipeline shader.
 
 ### Versi 0.0.0.7: Root Signature dan Pipeline State
 
-- **Tujuan**: Siapkan shader pipeline untuk render geometri.
-- **Fitur** (Direct3D 12 Steps):
-  - **Serialize Root Signature**: Bikin root signature untuk MVP matrix.
-  - **Create Pipeline State**: Bikin PSO dengan vertex/pixel shader sederhana.
-  - Tambah `IPipelineComponent.h` untuk `RootSignature.h`, `PipelineState.h`.
-  - Tambah `Vector3.h`, `Matrix4.h`, `MathUtils.h` untuk transformasi.
-  - Render segitiga putih menggunakan vertex buffer sementara.
-  - Logger console-only, log tambahan (`Root signature created`, `Pipeline state created`, `Drawing triangle`).
+- **Tujuan**: Menyiapkan pipeline shader untuk rendering geometri.
+- **Fitur**:
+  - Pembuatan root signature untuk matriks MVP.
+  - Pembuatan Pipeline State Object dengan vertex/pixel shader sederhana.
+  - Kelas `IPipelineComponent.h` untuk `RootSignature.h` dan `PipelineState.h`.
+  - Penambahan `Vector3.h`, `Matrix4.h` untuk transformasi.
+  - Rendering segitiga putih menggunakan vertex buffer sementara.
+  - Logging berbasis konsol dengan catatan tambahan (`Root signature created`, `Drawing triangle`).
 - **Status**:
-  - Exit code 0, window menampilkan segitiga putih dengan latar biru.
-  - Siap untuk vertex buffer dan index buffer.
+  - Exit code 0, segitiga putih ditampilkan pada latar biru.
 
 ### Versi 0.0.0.8: Vertex Buffer, Index Buffer, dan Abstraksi Renderable
 
-- **Tujuan**: Lengkapi pipeline geometri dengan vertex/index buffer dan struktur modular.
-- **Fitur** (Direct3D 12 Steps):
-  - **Create Vertex Buffer**: Buffer permanen untuk 3 vertex segitiga.
-  - **Create Index Buffer**: Buffer untuk 3 indeks (`DXGI_FORMAT_R32_UINT`).
-  - **Submit Draw Calls**: Ganti `DrawInstanced` ke `DrawIndexedInstanced`.
-  - Tambah `IRenderable.h` sebagai interface untuk rendering objek.
-  - Tambah `Triangle.h/cpp` sebagai implementasi `IRenderable` untuk segitiga.
-  - Update `Application` untuk kelola list `IRenderable` (saat ini 1 segitiga).
-  - Logger console-only, log tambahan (`Vertex buffer created`, `Index buffer created`, `Rendering triangle`).
-- **Masalah**:
-  - Segitiga besar karena kamera dekat (z=2) dan FOV lebar (60°).
+- **Tujuan**: Melengkapi pipeline geometri dengan vertex/index buffer dan struktur modular.
+- **Fitur**:
+  - Pembuatan vertex buffer permanen untuk 3 vertex segitiga.
+  - Pembuatan index buffer untuk 3 indeks (`DXGI_FORMAT_R32_UINT`).
+  - Penggantian `DrawInstanced` dengan `DrawIndexedInstanced`.
+  - Kelas `IRenderable.h` sebagai interface untuk objek renderable.
+  - Kelas `Triangle.h/cpp` sebagai implementasi `IRenderable` untuk segitiga.
+  - Pembaruan `Application` untuk mengelola daftar `IRenderable` (saat ini 1 segitiga).
+  - Logging berbasis konsol dengan catatan tambahan (`Vertex buffer created`, `Rendering triangle`).
+- **Kendala**:
+  - Segitiga tampak besar karena posisi kamera (z=2) dan FOV lebar (60°).
 - **Solusi**:
-  - Pertahankan ukuran besar untuk visibilitas, rencanakan transformasi dinamis di versi berikutnya.
+  - Mempertahankan ukuran besar untuk visibilitas, merencanakan transformasi dinamis pada versi berikutnya.
 - **Status**:
-  - Exit code 0, window menampilkan segitiga putih besar dengan latar biru.
-  - Pipeline geometri dasar hampir selesai, siap untuk transformasi dinamis.
+  - Exit code 0, segitiga putih besar ditampilkan pada latar biru.
+
+### Versi 0.0.0.9: Transformasi Dinamis dan Pustaka Matematika Kustom
+
+- **Tujuan**: Mengimplementasikan rotasi dinamis pada segitiga dan mengganti pustaka matematika eksternal dengan pustaka kustom.
+- **Fitur**:
+  - Penambahan transformasi dinamis menggunakan `Math::Matrix4` untuk rotasi 90° per detik pada sumbu Y.
+  - Pembaruan kelas `Triangle` dengan fungsi `Update` untuk mendukung rotasi.
+  - Penggantian pustaka matematika DirectX dengan `Math::Matrix4` dan `Math::Vector3` untuk perhitungan matriks MVP.
+  - Pembaruan constant buffer setiap frame untuk mendukung animasi.
+  - Logging berbasis konsol dengan catatan tambahan (`Updating triangle transform`, `MVP Matrix`).
+- **Kendala**:
+  - Pemilihan adapter awalnya bermasalah, menyebabkan crash dengan exit code 1.
+  - Penggunaan pustaka matematika eksternal membuat engine kurang mandiri.
+- **Solusi**:
+  - Memperbaiki logika pemilihan adapter pada `Device::Initialize`.
+  - Menulis ulang `Device::UpdateConstantBuffer` menggunakan `Math::Matrix4::CreateLookAt` dan `Math::CreatePerspective`.
+- **Status**:
+  - Exit code 0, segitiga berotasi dengan lancar, pustaka matematika sepenuhnya kustom.
 
 ## Struktur File
 
-Berikut file utama dan fungsinya:
+Berikut adalah struktur file utama dan fungsinya:
 
-### Core
-
-- **include/Core/Application.h, src/Core/Application.cpp**:
-  - Kelas utama, inisialisasi `Window`, `Device`, loop `Run`.
-  - Fitur: Timeout 10 detik, try-catch, NVIDIA Optimus hint, clear RTV/DSV, draw triangle, present.
-- **include/Core/Window.h, src/Core/Window.cpp**:
-  - Window Win32 (1280x720, "Rancage Render Engine").
-  - Handle `WM_PAINT`, `WM_KEYDOWN` (Escape), `WM_DESTROY`.
-  - Try-catch di `ProcessMessages`, log pesan (`0x%04X`).
-- **include/Core/Debug.h, src/Core/Debug.cpp**:
-  - Debug layer Direct3D 12 (dimatikan untuk stabilitas).
-
-### Graphics
-
-- **include/Graphics/Device.h, src/Graphics/Device.cpp**:
-  - Kelola `ID3D12Device`, DXGI factory, pilih RTX 3060.
-  - Inisialisasi `Command`, `SwapChain`, RTV/DSV heap, RTV, DSV, Fence, RootSignature, PipelineState.
-  - Update constant buffer untuk MVP matrix.
-- **include/Graphics/Command.h, src/Graphics/Command.cpp**:
-  - Kelola command queue, allocator, list (`D3D12_COMMAND_LIST_TYPE_DIRECT`).
-  - Getter: `GetQueue`, `GetAllocator`, `GetList`.
-- **include/Graphics/SwapChain.h, src/Graphics/SwapChain.cpp**:
-  - Kelola SwapChain (double buffer, `DXGI_FORMAT_R8G8B8A8_UNORM`).
-- **include/Graphics/RootSignature.h, src/Graphics/RootSignature.cpp**:
-  - Kelola root signature untuk shader (CBV untuk MVP).
-  - Implementasi `IPipelineComponent`.
-- **include/Graphics/PipelineState.h, src/Graphics/PipelineState.cpp**:
-  - Kelola PSO dengan vertex/pixel shader.
-  - Implementasi `IPipelineComponent`.
-- **include/Graphics/IRenderable.h**:
-  - Interface untuk objek renderable (fungsi `Render` dan `Update`).
-- **include/Graphics/Triangle.h, src/Graphics/Triangle.cpp**:
-  - Kelas segitiga, implementasi `IRenderable`.
-  - Kelola vertex buffer (3 vertex) dan index buffer (3 indeks).
-
-### Resources
-
-- **include/Resources/DepthBuffer.h, src/Resources/DepthBuffer.cpp**:
-  - Kelola depth/stencil buffer (`DXGI_FORMAT_D32_FLOAT`).
-  - Implementasi `IResource`.
-
-### Interfaces
-
-- **include/Interfaces/IResource.h**:
-  - Base class untuk resource (`DepthBuffer`, nanti `VertexBuffer`).
-- **include/Interfaces/IPipelineComponent.h**:
-  - Base class untuk pipeline (`RootSignature`, `PipelineState`).
-
-### Math
-
-- **include/Math/Vector3.h, src/Math/Vector3.cpp**:
-  - Vektor 3D untuk posisi vertex.
-- **include/Math/Matrix4.h, src/Math/Matrix4.cpp**:
-  - Matriks 4x4 untuk transformasi MVP.
-- **include/Math/MathUtils.h, src/Math/MathUtils.cpp**:
-  - Placeholder untuk helper math.
-
-### Assets
-
-- **assets/shaders/VertexShader.hlsl**:
-  - Vertex shader untuk transformasi MVP.
-- **assets/shaders/PixelShader.hlsl**:
-  - Pixel shader untuk warna putih.
-
-### Utils
-
-- **include/Utils/Logger.h, src/Core/Logger.cpp**:
-  - Console-only logger (`std::wcout`), thread-safe (mutex).
-  - Level: `[INFO]`, `[WARNING]`, `[ERROR]`.
-  - Redirect ke `Logs\engine.txt` via `Engine.exe > Logs\engine.txt`.
-  - Note: File output crash, ditunda ke AsyncLogger.
+- **Core**:
+  - `Application.h/cpp`: Kelas utama untuk inisialisasi `Window`, `Device`, dan menjalankan loop rendering.
+  - `Window.h/cpp`: Pengelolaan jendela Win32, menangani pesan seperti `WM_PAINT` dan `WM_KEYDOWN` (Escape).
+  - `Debug.h/cpp`: Pengelolaan debug layer (dinonaktifkan untuk stabilitas).
+- **Graphics**:
+  - `Device.h/cpp`: Mengelola `ID3D12Device`, pemilihan GPU RTX 3060, dan pembaruan constant buffer.
+  - `Command.h/cpp`: Mengelola command queue, allocator, dan command list.
+  - `SwapChain.h/cpp`: Mengelola double buffering dengan format `DXGI_FORMAT_R8G8B8A8_UNORM`.
+  - `RootSignature.h/cpp`: Mengelola root signature untuk matriks MVP.
+  - `PipelineState.h/cpp`: Mengelola Pipeline State Object untuk shader.
+  - `IRenderable.h`: Interface untuk objek renderable dengan fungsi `Render` dan `Update`.
+  - `Triangle.h/cpp`: Implementasi segitiga dengan vertex/index buffer dan rotasi dinamis.
+- **Resources**:
+  - `DepthBuffer.h/cpp`: Mengelola depth/stencil buffer dengan format `DXGI_FORMAT_D32_FLOAT`.
+- **Interfaces**:
+  - `IResource.h`: Kelas dasar untuk resource seperti depth buffer.
+  - `IPipelineComponent.h`: Kelas dasar untuk komponen pipeline seperti root signature dan pipeline state.
+- **Math**:
+  - `Vector3.h/cpp`: Struktur vektor 3D untuk posisi vertex dan perhitungan kamera.
+  - `Matrix4.h/cpp`: Struktur matriks 4x4 untuk transformasi matriks MVP.
+- **Assets**:
+  - `shaders/VertexShader.hlsl`: Shader vertex untuk transformasi menggunakan matriks MVP.
+  - `shaders/PixelShader.hlsl`: Shader pixel untuk menghasilkan warna putih.
+- **Utils**:
+  - `Logger.h/cpp`: Sistem logging berbasis konsol dengan output ke `Logs\engine.txt`.
 
 ## Cara Menjalankan
 
-1. Build di Visual Studio (Debug, x64):
+1. **Build**:
 
-   ```bash
-   Ctrl+Shift+B
-   ```
+   - Buka solusi di Visual Studio (konfigurasi Debug, platform x64).
 
-2. Jalankan tanpa debug:
+   - Jalankan build dengan perintah:
 
-   ```bash
-   Ctrl+F5
-   ```
+     ```bash
+     Ctrl+Shift+B
+     ```
 
-   Atau via Command Prompt untuk simpan log:
+2. **Eksekusi**:
 
-   ```bash
-   cd D:\Projects\Visual Studio\Rancage Render Engine\x64\Debug
-   Engine.exe > Logs\engine.txt
-   ```
+   - Jalankan aplikasi tanpa debugging:
 
-3. Cek `Logs\engine.txt` untuk debug.
+     ```bash
+     Ctrl+F5
+     ```
+
+   - Untuk menyimpan log, gunakan Command Prompt:
+
+     ```bash
+     cd D:\Projects\Visual Studio\Rancage Render Engine\x64\Debug
+     Engine.exe > Logs\engine.txt
+     ```
+
+3. **Verifikasi**:
+
+   - Periksa file `Logs\engine.txt` untuk detail runtime dan debugging.
+
+**Hasil Eksekusi**:
+
+- Jendela beresolusi 1280x720 menampilkan segitiga putih yang berotasi 90° per detik dengan latar belakang biru.
+- Aplikasi dapat ditutup dengan menekan tombol **Escape** atau menunggu batas waktu 10 detik.
+
+**Contoh Output Log**:
+
+```
+[INFO] Window created: Rancage Render Engine (1280x720)
+[INFO] Selected adapter: NVIDIA GeForce RTX 3060 Laptop GPU
+[INFO] D3D12 device created
+[INFO] Triangle initialized
+[INFO] Updating triangle transform
+[INFO] MVP Matrix: [-0.97, 0.00, 0.04, 0.00]
+[INFO] Rendering triangle
+[INFO] Application exited normally
+```
 
 ## Catatan
 
-- Console-only logger stabil, cukup untuk render awal.
-- AsyncLogger direncanakan untuk skalabilitas saat render Sponza.
-- File di `EngineCore/include` dan `EngineCore/src` modular.
-- Fokus berikutnya: Transformasi dinamis untuk animasi segitiga, lalu tekstur untuk material.
+- Sistem logging berbasis konsol saat ini stabil dan memadai untuk tahap pengembangan awal.
+- AsyncLogger direncanakan untuk mendukung volume log besar saat merender scene kompleks seperti Sponza.
+- Kode disusun secara modular pada direktori `Core/include` dan `Core/src` untuk memudahkan pengembangan.
+- Fokus pengembangan berikutnya adalah penambahan dukungan tekstur pada Versi 0.0.1.0, diikuti dengan mesh kompleks menuju rendering Sponza.
+
+## Penutup
+
+Proyek ini dikembangkan untuk mempelajari dan mengimplementasikan teknik rendering real-time. Inspirasi berasal dari demo rendering klasik dan scene Sponza. Saran dan masukan untuk pengembangan lebih lanjut sangat dihargai.

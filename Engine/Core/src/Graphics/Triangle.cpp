@@ -84,6 +84,10 @@ namespace Graphics
             m_IBV.Format = DXGI_FORMAT_R32_UINT;
         }
 
+        // Inisialisasi transform
+        m_Transform.SetPosition(Math::Vector3(0.0f, 0.0f, 0.0f));
+        m_Transform.SetScale(Math::Vector3(1.0f, 1.0f, 1.0f));
+
         Logger::Log(LogLevel::Info, "Triangle initialized");
     }
 
@@ -94,5 +98,17 @@ namespace Graphics
         commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
         commandList->DrawIndexedInstanced(3, 1, 0, 0, 0);
         Logger::Log(LogLevel::Info, "Rendering triangle");
+    }
+
+    void Triangle::Update(float deltaTime)
+    {
+        // Rotasi di sumbu Y (90 derajat/detik = 1.5708 radian/detik)
+        m_Transform.Rotate(Math::Vector3(0.0f, 1.5708f * deltaTime, 0.0f));
+        Logger::Log(LogLevel::Info, "Updating triangle transform");
+    }
+
+    Math::Matrix4 Triangle::GetModelMatrix() const
+    {
+        return m_Transform.GetModelMatrix();
     }
 }

@@ -146,6 +146,7 @@
     <ClCompile Include="Core\src\Graphics\Triangle.cpp" />
     <ClCompile Include="Core\src\Math\MathUtils.cpp" />
     <ClCompile Include="Core\src\Math\Matrix4.cpp" />
+    <ClCompile Include="Core\src\Math\Transform.cpp" />
     <ClCompile Include="Core\src\Math\Vector3.cpp" />
     <ClCompile Include="Core\src\Resources\DepthBuffer.cpp" />
     <ClCompile Include="Core\src\Utils\Logger.cpp" />
@@ -186,11 +187,13 @@
     <ClInclude Include="Core\include\Graphics\RootSignature.h" />
     <ClInclude Include="Core\include\Graphics\SwapChain.h" />
     <ClInclude Include="Core\include\Graphics\Triangle.h" />
+    <ClInclude Include="Core\include\Interfaces\IAssetLoader.h" />
     <ClInclude Include="Core\include\Interfaces\IPipelineComponent.h" />
     <ClInclude Include="Core\include\Interfaces\IRenderable.h" />
     <ClInclude Include="Core\include\Interfaces\IResource.h" />
     <ClInclude Include="Core\include\Math\MathUtils.h" />
     <ClInclude Include="Core\include\Math\Matrix4.h" />
+    <ClInclude Include="Core\include\Math\Transform.h" />
     <ClInclude Include="Core\include\Math\Vector3.h" />
     <ClInclude Include="Core\include\Resources\DepthBuffer.h" />
     <ClInclude Include="Core\include\Utils\Logger.h" />

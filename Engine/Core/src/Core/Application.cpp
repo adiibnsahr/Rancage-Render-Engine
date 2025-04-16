@@ -56,6 +56,7 @@ namespace Core
         try
         {
             auto start = std::chrono::steady_clock::now();
+            auto lastTime = start;
             while (m_Window.ProcessMessages())
             {
                 auto now = std::chrono::steady_clock::now();
@@ -63,6 +64,16 @@ namespace Core
                 {
                     Logger::Log(LogLevel::Info, "Timeout reached, stopping loop");
                     break;
+                }
+
+                // Hitung delta time (detik)
+                float deltaTime = std::chrono::duration<float>(now - lastTime).count();
+                lastTime = now;
+
+                // Update renderables
+                for (const auto& renderable : m_Renderables)
+                {
+                    renderable->Update(deltaTime);
                 }
 
                 // Wait for previous frame
@@ -93,7 +104,7 @@ namespace Core
                 m_Device.GetCommand().GetList()->SetGraphicsRootSignature(m_Device.GetRootSignature().GetRootSignature());
 
                 // Update and set constant buffer
-                m_Device.UpdateConstantBuffer();
+                m_Device.UpdateConstantBuffer(m_Renderables[0]->GetModelMatrix());
                 m_Device.GetCommand().GetList()->SetGraphicsRootConstantBufferView(0, m_Device.GetConstantBuffer()->GetGPUVirtualAddress());
 
                 // Clear RTV
