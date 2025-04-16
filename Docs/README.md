@@ -4,7 +4,7 @@ Rancage Render Engine adalah proyek render engine berbasis DirectX 12 (C++) deng
 
 ## Perjalanan Pengembangan
 
-Berikut adalah ringkasan versi pengembangan dari awal hingga saat ini:
+Proyek mengikuti langkah inisialisasi Direct3D 12, dengan penyesuaian untuk stabilitas dan kemudahan debug. Berikut progres hingga versi 0.0.0.5:
 
 ### Versi 0.0.0.1: Inisialisasi Window dan Debug Layer
 
@@ -69,66 +69,79 @@ Berikut adalah ringkasan versi pengembangan dari awal hingga saat ini:
   - Exit code 0, siap untuk clear screen atau rendering sederhana.
   - Window, Device, Command, SwapChain, RTV jalan mulus.
 
+### Versi 0.0.0.5: Fence dan Clear Screen
+
+- **Tujuan**: Tambah sync GPU-CPU dan render warna ke window.
+- **Fitur** (Direct3D 12 Steps):
+  - **Create Fence**: Bikin `ID3D12Fence` untuk sync command queue.
+  - **Clear Render Target**: Clear back buffer ke warna biru tua via RTV.
+  - **Present SwapChain**: Tampilkan buffer di window.
+  - Loop sederhana: Wait fence, clear RTV, execute command list, present.
+  - Logger console-only, log tambahan (`Fence created`, `Clearing back buffer`, `Presented back buffer`).
+- **Masalah**:
+  - Error `class "Graphics::Command" has no member "GetList"` karena `Command` kurang getter.
+- **Solusi**:
+  - Tambah `GetQueue`, `GetAllocator`, `GetList` di `Command.h` dan `Command.cpp`.
+  - Pastikan command list dibuat dan ditutup saat inisialisasi.
+- **Status**:
+  - Exit code 0, window menampilkan warna biru.
+  - Siap untuk depth buffer dan pipeline.
+
 ## Struktur File
 
-Berikut adalah file utama di proyek dan fungsinya:
+Berikut file utama dan fungsinya:
 
 ### Core
 
 - **include/Core/Application.h, src/Core/Application.cpp**:
-  - Kelas utama untuk inisialisasi dan menjalankan aplikasi.
-  - Mengatur `Window`, `Device`, dan loop utama (`Run`).
-  - Fitur: Timeout 10 detik, try-catch untuk exit code 0, NVIDIA Optimus hint untuk RTX 3060.
+  - Kelas utama, inisialisasi `Window`, `Device`, loop `Run`.
+  - Fitur: Timeout 10 detik, try-catch, NVIDIA Optimus hint, clear RTV, present.
 - **include/Core/Window.h, src/Core/Window.cpp**:
-  - Mengelola window Win32 (1280x720, "Rancage Render Engine").
-  - Menangani pesan (`WM_PAINT`, `WM_KEYDOWN` untuk Escape, `WM_DESTROY`).
-  - Fitur: Try-catch di `ProcessMessages`, logging pesan detail (`Processing message: 0x%04X`).
+  - Window Win32 (1280x720, "Rancage Render Engine").
+  - Handle `WM_PAINT`, `WM_KEYDOWN` (Escape), `WM_DESTROY`.
+  - Try-catch di `ProcessMessages`, log pesan (`0x%04X`).
 - **include/Core/Debug.h, src/Core/Debug.cpp**:
-  - Mengelola debug layer Direct3D 12.
-  - Saat ini dinonaktifkan untuk hindari crash.
+  - Debug layer Direct3D 12 (dimatikan untuk stabilitas).
 
 ### Graphics
 
 - **include/Graphics/Device.h, src/Graphics/Device.cpp**:
-  - Mengelola Direct3D 12 device dan DXGI factory.
-  - Memilih RTX 3060 berdasarkan VRAM tertinggi.
-  - Menginisialisasi `Command` dan `SwapChain`.
+  - Kelola `ID3D12Device`, DXGI factory, pilih RTX 3060.
+  - Inisialisasi `Command`, `SwapChain`, RTV heap, RTV, Fence.
 - **include/Graphics/Command.h, src/Graphics/Command.cpp**:
-  - Mengelola command queue, allocator, dan list untuk eksekusi GPU.
-  - Tipe: `D3D12_COMMAND_LIST_TYPE_DIRECT`.
+  - Kelola command queue, allocator, list (`D3D12_COMMAND_LIST_TYPE_DIRECT`).
+  - Tambah getter: `GetQueue`, `GetAllocator`, `GetList`.
 - **include/Graphics/SwapChain.h, src/Graphics/SwapChain.cpp**:
-  - Mengelola SwapChain untuk double buffering.
-  - Format: `DXGI_FORMAT_R8G8B8A8_UNORM`, 2 buffer, swap effect flip discard.
+  - Kelola SwapChain (double buffer, `DXGI_FORMAT_R8G8B8A8_UNORM`).
 
 ### Utils
 
 - **include/Utils/Logger.h, src/Core/Logger.cpp**:
-  - Sistem logging berbasis console (`std::wcout`).
-  - Thread-safe dengan mutex.
+  - Console-only logger (`std::wcout`), thread-safe (mutex).
   - Level: `[INFO]`, `[WARNING]`, `[ERROR]`.
-  - Workaround: Redirect ke `Logs\engine.txt` via `Engine.exe > Logs\engine.txt`.
-  - Catatan: File output (`wofstream`) menyebabkan crash, ditunda sampai AsyncLogger.
+  - Redirect ke `Logs\engine.txt` via `Engine.exe > Logs\engine.txt`.
+  - Note: File output crash, ditunda ke AsyncLogger.
 
 ## Status Saat Ini
 
-- **Versi**: 0.0.0.4
+- **Versi**: 0.0.0.5
 - **Fitur**:
-  - Window stabil (Escape, timeout 10 detik).
+  - Window stabil (Escape, timeout 10 detik), menampilkan warna biru.
   - Device pake RTX 3060 (5996 MB VRAM).
-  - Command queue, allocator, list, SwapChain, RTV siap.
+  - Command queue, allocator, list, SwapChain, RTV, Fence siap.
   - Logger console-only, redirect ke `engine.txt`.
 - **Exit Code**: 0 (Debug configuration).
 - **Direct3D 12 Steps Tercover**:
   - Enable Debug Functionality (dimatikan).
   - Create DXGI Factory, Query Adapters, Create Device.
   - Create Command Queue, Allocator, Lists.
-  - Create Swap Chain, Descriptor Heaps, Render Target Views.
+  - Create Swap Chain, Descriptor Heaps, Render Target Views, Fence.
+  - Clear Render Target, Present SwapChain.
 - **Rencana**:
-  - Clear screen ke warna (misal biru) untuk tes visual.
-  - Create Depth Buffer, Depth Stencil View (DSV).
-  - Create Fence untuk sync GPU-CPU.
+  - Create Depth Buffer, Depth Stencil View (DSV) untuk Z-buffer.
+  - Setup Root Signature dan Pipeline State untuk rendering geometri.
   - AsyncLogger sebelum Sponza untuk high volume log.
-  - Pipeline, vertex buffer, dll., untuk render Sponza.
+  - Vertex buffer, index buffer, textures untuk render Sponza.
 
 ## Cara Menjalankan
 
@@ -155,7 +168,7 @@ Berikut adalah file utama di proyek dan fungsinya:
 
 ## Catatan
 
-- Console-only logger cukup untuk tahap ini (setup rendering awal).
-- File output akan diganti ke AsyncLogger untuk skalabilitas saat rendering Sponza.
-- Struktur file di `EngineCore/include` dan `EngineCore/src` dirancang modular untuk ekspansi.
-- Fokus berikutnya: Render target untuk lihat output visual di window.
+- Console-only logger stabil, cukup untuk render awal.
+- AsyncLogger direncanakan untuk skalabilitas saat render Sponza.
+- File di `EngineCore/include` dan `EngineCore/src` modular.
+- Fokus berikutnya: Depth buffer dan pipeline untuk rendering geometri.

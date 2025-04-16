@@ -5,7 +5,14 @@
 namespace Graphics
 {
     Device::Device() = default;
-    Device::~Device() = default;
+    Device::~Device()
+    {
+        if (m_FenceEvent)
+        {
+            CloseHandle(m_FenceEvent);
+            m_FenceEvent = nullptr;
+        }
+    }
 
     bool Device::Initialize(HWND hwnd, UINT width, UINT height)
     {
@@ -84,8 +91,26 @@ namespace Graphics
         }
         Logger::Log(LogLevel::Info, "RTV descriptor heap created");
 
-        CreateRenderTargetViews(); // Panggil langsung setelah heap
+        // Create Fence
+        hr = m_Device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_Fence));
+        if (FAILED(hr))
+        {
+            _com_error err(hr);
+            Logger::Log(LogLevel::Error, "Failed to create fence: %s", err.ErrorMessage());
+            return false;
+        }
+        Logger::Log(LogLevel::Info, "Fence created");
 
+        m_FenceValue = 1;
+        m_FenceEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
+        if (!m_FenceEvent)
+        {
+            Logger::Log(LogLevel::Error, "Failed to create fence event");
+            return false;
+        }
+        Logger::Log(LogLevel::Info, "Fence event created");
+
+        CreateRenderTargetViews();
         return true;
     }
 
@@ -108,6 +133,33 @@ namespace Graphics
             m_Device->CreateRenderTargetView(backBuffer.Get(), nullptr, rtvHandle);
             Logger::Log(LogLevel::Info, "Render target view created for buffer %u", i);
             rtvHandle.ptr += rtvDescriptorSize;
+        }
+    }
+
+    void Device::SignalFence(ID3D12CommandQueue* queue)
+    {
+        HRESULT hr = queue->Signal(m_Fence.Get(), m_FenceValue);
+        if (FAILED(hr))
+        {
+            _com_error err(hr);
+            Logger::Log(LogLevel::Error, "Failed to signal fence: %s", err.ErrorMessage());
+            return;
+        }
+        ++m_FenceValue;
+    }
+
+    void Device::WaitForFence()
+    {
+        if (m_Fence->GetCompletedValue() < m_FenceValue - 1)
+        {
+            HRESULT hr = m_Fence->SetEventOnCompletion(m_FenceValue - 1, m_FenceEvent);
+            if (FAILED(hr))
+            {
+                _com_error err(hr);
+                Logger::Log(LogLevel::Error, "Failed to set fence event: %s", err.ErrorMessage());
+                return;
+            }
+            WaitForSingleObject(m_FenceEvent, INFINITE);
         }
     }
 }

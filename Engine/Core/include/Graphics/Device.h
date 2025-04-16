@@ -18,7 +18,12 @@ namespace Graphics
         Command& GetCommand() { return m_Command; }
         SwapChain& GetSwapChain() { return m_SwapChain; }
         ID3D12DescriptorHeap* GetRTVHeap() const { return m_RTVHeap.Get(); }
-        void CreateRenderTargetViews(); // Buat RTV
+        ID3D12Fence* GetFence() const { return m_Fence.Get(); }
+        UINT64 GetFenceValue() const { return m_FenceValue; }
+        HANDLE GetFenceEvent() const { return m_FenceEvent; }
+        void SignalFence(ID3D12CommandQueue* queue);
+        void WaitForFence();
+        void CreateRenderTargetViews();
 
     private:
         Microsoft::WRL::ComPtr<IDXGIFactory6> m_Factory;
@@ -26,6 +31,9 @@ namespace Graphics
         Microsoft::WRL::ComPtr<ID3D12Device> m_Device;
         Command m_Command;
         SwapChain m_SwapChain;
-        Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> m_RTVHeap; // Heap buat RTV
+        Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> m_RTVHeap;
+        Microsoft::WRL::ComPtr<ID3D12Fence> m_Fence;
+        UINT64 m_FenceValue = 0;
+        HANDLE m_FenceEvent = nullptr;
     };
 }

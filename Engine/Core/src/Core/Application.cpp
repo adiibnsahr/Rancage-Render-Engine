@@ -4,6 +4,7 @@
 #include "../Core/include/Utils/Logger.h"
 #include <exception>
 #include <chrono>
+#include <comdef.h>
 
 // NVIDIA Optimus hint
 extern "C" {
@@ -56,7 +57,63 @@ namespace Core
                     Logger::Log(LogLevel::Info, "Timeout reached, stopping loop");
                     break;
                 }
-                Logger::Log(LogLevel::Info, "Message loop running");
+
+                // Wait for previous frame
+                m_Device.WaitForFence();
+
+                // Get current back buffer index
+                UINT backBufferIndex = m_Device.GetSwapChain().GetSwapChain()->GetCurrentBackBufferIndex();
+
+                // Reset command allocator and list
+                HRESULT hr = m_Device.GetCommand().GetAllocator()->Reset();
+                if (FAILED(hr))
+                {
+                    _com_error err(hr);
+                    Logger::Log(LogLevel::Error, "Failed to reset command allocator: %s", err.ErrorMessage());
+                    break;
+                }
+
+                hr = m_Device.GetCommand().GetList()->Reset(m_Device.GetCommand().GetAllocator(), nullptr);
+                if (FAILED(hr))
+                {
+                    _com_error err(hr);
+                    Logger::Log(LogLevel::Error, "Failed to reset command list: %s", err.ErrorMessage());
+                    break;
+                }
+
+                // Clear RTV
+                D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = m_Device.GetRTVHeap()->GetCPUDescriptorHandleForHeapStart();
+                rtvHandle.ptr += backBufferIndex * m_Device.GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+
+                const float clearColor[] = { 0.0f, 0.2f, 0.4f, 1.0f }; // Biru tua
+                m_Device.GetCommand().GetList()->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
+                Logger::Log(LogLevel::Info, "Clearing back buffer %u to blue", backBufferIndex);
+
+                // Close command list
+                hr = m_Device.GetCommand().GetList()->Close();
+                if (FAILED(hr))
+                {
+                    _com_error err(hr);
+                    Logger::Log(LogLevel::Error, "Failed to close command list: %s", err.ErrorMessage());
+                    break;
+                }
+
+                // Execute command list
+                ID3D12CommandList* commandLists[] = { m_Device.GetCommand().GetList() };
+                m_Device.GetCommand().GetQueue()->ExecuteCommandLists(1, commandLists);
+
+                // Signal fence
+                m_Device.SignalFence(m_Device.GetCommand().GetQueue());
+
+                // Present
+                hr = m_Device.GetSwapChain().GetSwapChain()->Present(1, 0);
+                if (FAILED(hr))
+                {
+                    _com_error err(hr);
+                    Logger::Log(LogLevel::Error, "Failed to present SwapChain: %s", err.ErrorMessage());
+                    break;
+                }
+                Logger::Log(LogLevel::Info, "Presented back buffer %u", backBufferIndex);
             }
         }
         catch (const std::exception& e)
