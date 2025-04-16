@@ -67,6 +67,15 @@
     <ClCompile Include="Core\src\Core\Application.cpp">
       <Filter>Source Files\Core\src\Core</Filter>
     </ClCompile>
+    <ClCompile Include="Core\src\Core\Window.cpp">
+      <Filter>Source Files\Core\src\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\src\Graphics\Command.cpp">
+      <Filter>Source Files\Core\src\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\src\Graphics\SwapChain.cpp">
+      <Filter>Source Files\Core\src\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shaders\VertexShader.hlsl">
@@ -91,6 +100,15 @@
     </ClInclude>
     <ClInclude Include="Core\include\Core\Application.h">
       <Filter>Source Files\Core\include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\include\Core\Window.h">
+      <Filter>Source Files\Core\include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\include\Graphics\Command.h">
+      <Filter>Source Files\Core\include\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\include\Graphics\SwapChain.h">
+      <Filter>Source Files\Core\include\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

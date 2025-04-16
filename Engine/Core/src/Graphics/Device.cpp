@@ -7,10 +7,9 @@ namespace Graphics
     Device::Device() = default;
     Device::~Device() = default;
 
-    bool Device::Initialize()
+    bool Device::Initialize(HWND hwnd, UINT width, UINT height)
     {
-        // Langkah 2: Create DXGI Factory
-        HRESULT hr = CreateDXGIFactory2(DXGI_CREATE_FACTORY_DEBUG, IID_PPV_ARGS(&m_Factory));
+        HRESULT hr = CreateDXGIFactory2(0, IID_PPV_ARGS(&m_Factory));
         if (FAILED(hr))
         {
             _com_error err(hr);
@@ -19,7 +18,6 @@ namespace Graphics
         }
         Logger::Log(LogLevel::Info, "DXGI factory created");
 
-        // Langkah 3: Query Adapters, pilih yang VRAM tertinggi
         Microsoft::WRL::ComPtr<IDXGIAdapter1> bestAdapter;
         SIZE_T maxDedicatedVideoMemory = 0;
 
@@ -29,7 +27,7 @@ namespace Graphics
             bestAdapter->GetDesc1(&desc);
             if (desc.Flags & DXGI_ADAPTER_FLAG_SOFTWARE)
             {
-                continue; // Skip software adapters
+                continue;
             }
 
             Logger::Log(LogLevel::Info, "Found adapter: %ls, Dedicated VRAM: %zu MB", desc.Description, desc.DedicatedVideoMemory / (1024 * 1024));
@@ -47,7 +45,6 @@ namespace Graphics
             return false;
         }
 
-        // Langkah 4: Create Device
         hr = D3D12CreateDevice(m_Adapter.Get(), D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&m_Device));
         if (FAILED(hr))
         {
@@ -60,8 +57,19 @@ namespace Graphics
         m_Adapter->GetDesc1(&desc);
         Logger::Log(LogLevel::Info, "Selected adapter: %ls", desc.Description);
         Logger::Log(LogLevel::Info, "D3D12 device created");
+
+        if (!m_Command.Initialize(m_Device.Get()))
+        {
+            Logger::Log(LogLevel::Error, "Failed to initialize command");
+            return false;
+        }
+
+        if (!m_SwapChain.Initialize(m_Device.Get(), m_Command.GetQueue(), hwnd, width, height))
+        {
+            Logger::Log(LogLevel::Error, "Failed to initialize SwapChain");
+            return false;
+        }
+
         return true;
     }
 }
-
-

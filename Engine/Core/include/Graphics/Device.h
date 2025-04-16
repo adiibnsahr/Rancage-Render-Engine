@@ -2,21 +2,27 @@
 #include <dxgi1_6.h>
 #include <d3d12.h>
 #include <wrl/client.h>
+#include "../Core/include/Graphics/Command.h"
+#include "../Core/include/Graphics/SwapChain.h"
 
 namespace Graphics
 {
-	class Device
-	{
-	public:
-		Device();
-		~Device();
+    class Device
+    {
+    public:
+        Device();
+        ~Device();
 
-		bool Initialize();
-		ID3D12Device* GetDevice() const { return m_Device.Get(); }
+        bool Initialize(HWND hwnd, UINT width, UINT height); // Tambah params
+        ID3D12Device* GetDevice() const { return m_Device.Get(); }
+        Command& GetCommand() { return m_Command; }
+        SwapChain& GetSwapChain() { return m_SwapChain; }
 
-	private:
-		Microsoft::WRL::ComPtr<IDXGIFactory6> m_Factory;
-		Microsoft::WRL::ComPtr<IDXGIAdapter1> m_Adapter;
-		Microsoft::WRL::ComPtr<ID3D12Device> m_Device;
-	};
+    private:
+        Microsoft::WRL::ComPtr<IDXGIFactory6> m_Factory;
+        Microsoft::WRL::ComPtr<IDXGIAdapter1> m_Adapter;
+        Microsoft::WRL::ComPtr<ID3D12Device> m_Device;
+        Command m_Command;
+        SwapChain m_SwapChain;
+    };
 }
