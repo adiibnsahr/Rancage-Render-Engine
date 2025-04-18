@@ -20,6 +20,7 @@ namespace Graphics
         void WaitForFence();
         void SignalFence(ID3D12CommandQueue* queue);
         void UpdateConstantBuffer(const Math::Matrix4& modelMatrix = Math::Matrix4());
+        void UpdateConstantBuffer(const Math::Matrix4& modelMatrix, const Math::Matrix4& viewMatrix, const Math::Matrix4& projMatrix); // Overload baru
 
         // Getters
         ID3D12Device* GetDevice() const { return m_Device.Get(); }

@@ -217,10 +217,7 @@ namespace Graphics
         Math::Matrix4 mvp = modelMatrix * view * proj;
 
         // Transpose untuk shader (HLSL expect row-major)
-        Math::Matrix4 mvpTransposed;
-        for (int i = 0; i < 4; ++i)
-            for (int j = 0; j < 4; ++j)
-                mvpTransposed.m[i][j] = mvp.m[j][i];
+        Math::Matrix4 mvpTransposed = mvp.Transpose();
 
         // Update constant buffer
         void* mappedData;
@@ -244,5 +241,37 @@ namespace Graphics
         Logger::Log(LogLevel::Info, "            [%.2f, %.2f, %.2f, %.2f]",
             mvpTransposed.m[3][0], mvpTransposed.m[3][1], mvpTransposed.m[3][2], mvpTransposed.m[3][3]);
         Logger::Log(LogLevel::Info, "Constant buffer updated");
+    }
+
+    void Device::UpdateConstantBuffer(const Math::Matrix4& modelMatrix, const Math::Matrix4& viewMatrix, const Math::Matrix4& projMatrix)
+    {
+        // MVP = model * view * proj
+        Math::Matrix4 mvp = modelMatrix * viewMatrix * projMatrix;
+
+        // Transpose untuk shader (HLSL expect row-major)
+        Math::Matrix4 mvpTransposed = mvp.Transpose();
+
+        // Update constant buffer
+        void* mappedData;
+        CD3DX12_RANGE readRange(0, 0);
+        HRESULT hr = m_ConstantBuffer->Map(0, &readRange, &mappedData);
+        if (FAILED(hr))
+        {
+            Logger::Log(LogLevel::Error, "Failed to map constant buffer");
+            return;
+        }
+        memcpy(mappedData, mvpTransposed.m, sizeof(float) * 16);
+        m_ConstantBuffer->Unmap(0, nullptr);
+
+        // Log MVP matrix
+        Logger::Log(LogLevel::Info, "MVP Matrix: [%.2f, %.2f, %.2f, %.2f]",
+            mvpTransposed.m[0][0], mvpTransposed.m[0][1], mvpTransposed.m[0][2], mvpTransposed.m[0][3]);
+        Logger::Log(LogLevel::Info, "            [%.2f, %.2f, %.2f, %.2f]",
+            mvpTransposed.m[1][0], mvpTransposed.m[1][1], mvpTransposed.m[1][2], mvpTransposed.m[1][3]);
+        Logger::Log(LogLevel::Info, "            [%.2f, %.2f, %.2f, %.2f]",
+            mvpTransposed.m[2][0], mvpTransposed.m[2][1], mvpTransposed.m[2][2], mvpTransposed.m[2][3]);
+        Logger::Log(LogLevel::Info, "            [%.2f, %.2f, %.2f, %.2f]",
+            mvpTransposed.m[3][0], mvpTransposed.m[3][1], mvpTransposed.m[3][2], mvpTransposed.m[3][3]);
+        Logger::Log(LogLevel::Info, "Constant buffer updated with camera matrices");
     }
 }
