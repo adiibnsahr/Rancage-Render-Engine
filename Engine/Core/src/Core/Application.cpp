@@ -3,6 +3,7 @@
 #include "../Core/include/Core/Window.h"
 #include "../Core/include/Utils/Logger.h"
 #include "../Core/include/Math/Vector3.h"
+#include "../Core/include/Math/Matrix4.h"
 #include "../Core/include/Graphics/Triangle.h"
 #include <exception>
 #include <chrono>
@@ -45,7 +46,7 @@ namespace Core
 
         // Tambah segitiga ke renderables
         m_Renderables.push_back(std::make_unique<Graphics::Triangle>(m_Device.GetDevice()));
-        Logger::Log(LogLevel::Info, "Renderables initialized");
+        Logger::Log(LogLevel::Info, "Renderables initialized, count: %zu", m_Renderables.size());
 
         return true;
     }
@@ -57,6 +58,9 @@ namespace Core
         {
             auto start = std::chrono::steady_clock::now();
             auto lastTime = start;
+            float fpsAccumulatedTime = 0.0f;
+            int frameCount = 0;
+
             while (m_Window.ProcessMessages())
             {
                 auto now = std::chrono::steady_clock::now();
@@ -66,23 +70,29 @@ namespace Core
                     break;
                 }
 
-                // Hitung delta time (detik)
                 float deltaTime = std::chrono::duration<float>(now - lastTime).count();
                 lastTime = now;
 
-                // Update renderables
+                fpsAccumulatedTime += deltaTime;
+                frameCount++;
+                if (fpsAccumulatedTime >= 1.0f)
+                {
+                    float fps = frameCount / fpsAccumulatedTime;
+                    Logger::Log(LogLevel::Info, "FPS: %.2f", fps);
+                    fpsAccumulatedTime = 0.0f;
+                    frameCount = 0;
+                }
+
+                Logger::Log(LogLevel::Info, "Updating %zu renderables", m_Renderables.size());
                 for (const auto& renderable : m_Renderables)
                 {
                     renderable->Update(deltaTime);
                 }
 
-                // Wait for previous frame
                 m_Device.WaitForFence();
 
-                // Get current back buffer index
                 UINT backBufferIndex = m_Device.GetSwapChain().GetSwapChain()->GetCurrentBackBufferIndex();
 
-                // Reset command allocator and list
                 HRESULT hr = m_Device.GetCommand().GetAllocator()->Reset();
                 if (FAILED(hr))
                 {
@@ -99,22 +109,22 @@ namespace Core
                     break;
                 }
 
-                // Set pipeline state
                 m_Device.GetCommand().GetList()->SetPipelineState(m_Device.GetPipelineState().GetPipelineState());
                 m_Device.GetCommand().GetList()->SetGraphicsRootSignature(m_Device.GetRootSignature().GetRootSignature());
 
-                // Update and set constant buffer
-                m_Device.UpdateConstantBuffer(m_Renderables[0]->GetModelMatrix());
+                // Update constant buffer dengan model matrix
+                Math::Matrix4 modelMatrix = m_Renderables[0]->GetModelMatrix();
+                m_Device.UpdateConstantBuffer(modelMatrix);
                 m_Device.GetCommand().GetList()->SetGraphicsRootConstantBufferView(0, m_Device.GetConstantBuffer()->GetGPUVirtualAddress());
+                Logger::Log(LogLevel::Info, "Model Matrix sent: [%.2f, %.2f, %.2f, %.2f]",
+                    modelMatrix.m[0][0], modelMatrix.m[0][1], modelMatrix.m[0][2], modelMatrix.m[0][3]);
 
-                // Clear RTV
                 D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = m_Device.GetRTVHeap()->GetCPUDescriptorHandleForHeapStart();
                 rtvHandle.ptr += backBufferIndex * m_Device.GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
                 const float clearColor[] = { 0.0f, 0.2f, 0.4f, 1.0f };
                 m_Device.GetCommand().GetList()->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
                 Logger::Log(LogLevel::Info, "Clearing back buffer %u to blue", backBufferIndex);
 
-                // Clear DSV
                 m_Device.GetCommand().GetList()->ClearDepthStencilView(
                     m_Device.GetDepthBuffer().GetDSV(),
                     D3D12_CLEAR_FLAG_DEPTH,
@@ -124,24 +134,20 @@ namespace Core
                     nullptr);
                 Logger::Log(LogLevel::Info, "Clearing depth buffer");
 
-                // Set render targets
                 D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = m_Device.GetDepthBuffer().GetDSV();
                 m_Device.GetCommand().GetList()->OMSetRenderTargets(1, &rtvHandle, FALSE, &dsvHandle);
 
-                // Set viewport and scissor rect
                 D3D12_VIEWPORT viewport = { 0.0f, 0.0f, 1280.0f, 720.0f, 0.0f, 1.0f };
                 m_Device.GetCommand().GetList()->RSSetViewports(1, &viewport);
                 D3D12_RECT scissorRect = { 0, 0, 1280, 720 };
                 m_Device.GetCommand().GetList()->RSSetScissorRects(1, &scissorRect);
                 Logger::Log(LogLevel::Info, "Viewport and scissor rect set");
 
-                // Render semua renderables
                 for (const auto& renderable : m_Renderables)
                 {
                     renderable->Render(m_Device.GetCommand().GetList());
                 }
 
-                // Close command list
                 hr = m_Device.GetCommand().GetList()->Close();
                 if (FAILED(hr))
                 {
@@ -150,14 +156,11 @@ namespace Core
                     break;
                 }
 
-                // Execute command list
                 ID3D12CommandList* commandLists[] = { m_Device.GetCommand().GetList() };
                 m_Device.GetCommand().GetQueue()->ExecuteCommandLists(1, commandLists);
 
-                // Signal fence
                 m_Device.SignalFence(m_Device.GetCommand().GetQueue());
 
-                // Present
                 hr = m_Device.GetSwapChain().GetSwapChain()->Present(1, 0);
                 if (FAILED(hr))
                 {

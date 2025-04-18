@@ -13,6 +13,14 @@ namespace Graphics
             Math::Vector3(-0.5f, -0.5f, 0.5f) // Bottom left
         };
 
+        // Log vertex data untuk debug
+        Logger::Log(LogLevel::Info, "Vertex 0: (%.2f, %.2f, %.2f)",
+            vertices[0].x, vertices[0].y, vertices[0].z);
+        Logger::Log(LogLevel::Info, "Vertex 1: (%.2f, %.2f, %.2f)",
+            vertices[1].x, vertices[1].y, vertices[1].z);
+        Logger::Log(LogLevel::Info, "Vertex 2: (%.2f, %.2f, %.2f)",
+            vertices[2].x, vertices[2].y, vertices[2].z);
+
         // Create vertex buffer
         {
             CD3DX12_HEAP_PROPERTIES heapProperties(D3D12_HEAP_TYPE_UPLOAD);
@@ -44,6 +52,7 @@ namespace Graphics
             m_VBV.BufferLocation = m_VertexBuffer->GetGPUVirtualAddress();
             m_VBV.SizeInBytes = sizeof(vertices);
             m_VBV.StrideInBytes = sizeof(Math::Vector3);
+            Logger::Log(LogLevel::Info, "Vertex buffer created, stride: %u bytes", sizeof(Math::Vector3));
         }
 
         // Hardcoded indices
@@ -82,12 +91,12 @@ namespace Graphics
             m_IBV.BufferLocation = m_IndexBuffer->GetGPUVirtualAddress();
             m_IBV.SizeInBytes = sizeof(indices);
             m_IBV.Format = DXGI_FORMAT_R32_UINT;
+            Logger::Log(LogLevel::Info, "Index buffer created");
         }
 
         // Inisialisasi transform
         m_Transform.SetPosition(Math::Vector3(0.0f, 0.0f, 0.0f));
         m_Transform.SetScale(Math::Vector3(1.0f, 1.0f, 1.0f));
-
         Logger::Log(LogLevel::Info, "Triangle initialized");
     }
 
@@ -105,6 +114,9 @@ namespace Graphics
         // Rotasi di sumbu Y (90 derajat/detik = 1.5708 radian/detik)
         m_Transform.Rotate(Math::Vector3(0.0f, 1.5708f * deltaTime, 0.0f));
         Logger::Log(LogLevel::Info, "Updating triangle transform");
+        Math::Matrix4 modelMatrix = m_Transform.GetModelMatrix();
+        Logger::Log(LogLevel::Info, "Model Matrix: [%.2f, %.2f, %.2f, %.2f]",
+            modelMatrix.m[0][0], modelMatrix.m[0][1], modelMatrix.m[0][2], modelMatrix.m[0][3]);
     }
 
     Math::Matrix4 Triangle::GetModelMatrix() const
