@@ -5,9 +5,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Source Files\Shaders">
-      <UniqueIdentifier>{4d528759-8816-487e-8ed4-43c19ec8d9bb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\--[Outdated]--">
       <UniqueIdentifier>{fc21ba7e-32ac-43fd-bacc-668c6fadd68b}</UniqueIdentifier>
     </Filter>
@@ -26,182 +23,48 @@
     <Filter Include="Source Files\--[Outdated]--\Scenes">
       <UniqueIdentifier>{4fd99e52-4487-481b-a640-0a34f8a68563}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Core">
-      <UniqueIdentifier>{727c50a1-4dc7-486b-93c7-6b366b17fcdb}</UniqueIdentifier>
+    <Filter Include="Source Files\include">
+      <UniqueIdentifier>{e04a108e-97d8-4509-b629-c411485d61dc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Core\include">
-      <UniqueIdentifier>{d439b971-2c07-44df-bf9d-2b9ae6d82fe6}</UniqueIdentifier>
+    <Filter Include="Source Files\src">
+      <UniqueIdentifier>{131b96f6-86e6-4623-ae15-3bf997884e73}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Core\src">
-      <UniqueIdentifier>{7c3cb168-375f-4785-aad7-1ccc912e3a99}</UniqueIdentifier>
+    <Filter Include="Source Files\include\Core">
+      <UniqueIdentifier>{1083bb75-1013-4925-a774-40bb07f38bce}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Core\include\Core">
-      <UniqueIdentifier>{a10341f2-78bf-48c0-9d61-ec6ffa1ebc61}</UniqueIdentifier>
+    <Filter Include="Source Files\include\Logger">
+      <UniqueIdentifier>{db7c664c-2909-40d6-9f47-528a349c186f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Core\include\Utils">
-      <UniqueIdentifier>{3e939b6f-e813-4942-83f6-f33d76b2b809}</UniqueIdentifier>
+    <Filter Include="Source Files\src\Core">
+      <UniqueIdentifier>{bda9632b-138e-4093-944d-2aa475fdeebb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Core\src\Core">
-      <UniqueIdentifier>{b72c89b4-8340-465c-abfa-7d69ddc85251}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Core\src\Utils">
-      <UniqueIdentifier>{6db57246-60b3-4534-8104-5d16c9d26e9b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Core\include\Graphics">
-      <UniqueIdentifier>{3d940aa9-ea79-4289-aee8-0cb6f0b43d6a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Core\src\Graphics">
-      <UniqueIdentifier>{e368d916-b372-4957-a38a-1a2f1510426d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Core\include\Interfaces">
-      <UniqueIdentifier>{335f4ede-a2f8-4503-8163-5a2ad187772f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Core\include\Resources">
-      <UniqueIdentifier>{b0a52fc4-a675-4743-90a6-d41f3776a35b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Core\src\Resources">
-      <UniqueIdentifier>{c8a8b137-7591-4d3e-ba35-f3c13681a617}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Core\include\Math">
-      <UniqueIdentifier>{5a36fcc1-8c1a-45fa-8bad-129f515591d8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Core\src\Math">
-      <UniqueIdentifier>{c14130bb-2676-4d6c-9f96-0bf2d2666882}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Core\assets">
-      <UniqueIdentifier>{c5a4ade3-27ed-4775-911b-ed9de3c7e8a0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Core\assets\shaders">
-      <UniqueIdentifier>{60d75420-bda2-450a-93c9-8a2de83963aa}</UniqueIdentifier>
+    <Filter Include="Source Files\src\Logger">
+      <UniqueIdentifier>{83f3ab49-1570-4ffe-8dfb-10d6a93368dd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Core\src\Core\Debug.cpp">
-      <Filter>Source Files\Core\src\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\src\Utils\Logger.cpp">
-      <Filter>Source Files\Core\src\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\src\Graphics\Device.cpp">
-      <Filter>Source Files\Core\src\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\src\Core\Application.cpp">
-      <Filter>Source Files\Core\src\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\src\Core\Window.cpp">
-      <Filter>Source Files\Core\src\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\src\Graphics\Command.cpp">
-      <Filter>Source Files\Core\src\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\src\Graphics\SwapChain.cpp">
-      <Filter>Source Files\Core\src\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\src\Resources\DepthBuffer.cpp">
-      <Filter>Source Files\Core\src\Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\src\Graphics\RootSignature.cpp">
-      <Filter>Source Files\Core\src\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\src\Graphics\PipelineState.cpp">
-      <Filter>Source Files\Core\src\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\src\Math\Vector3.cpp">
-      <Filter>Source Files\Core\src\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\src\Math\Matrix4.cpp">
-      <Filter>Source Files\Core\src\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\src\Math\MathUtils.cpp">
-      <Filter>Source Files\Core\src\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\src\Graphics\Triangle.cpp">
-      <Filter>Source Files\Core\src\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\src\Math\Transform.cpp">
-      <Filter>Source Files\Core\src\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\src\Graphics\Camera.cpp">
-      <Filter>Source Files\Core\src\Graphics</Filter>
-    </ClCompile>
+    <ClInclude Include="include\Core\Device.h">
+      <Filter>Source Files\include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\IRenderContext.h">
+      <Filter>Source Files\include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Logger\ILogger.h">
+      <Filter>Source Files\include\Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Logger\Logger.h">
+      <Filter>Source Files\include\Logger</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Shaders\VertexShader.hlsl">
-      <Filter>Source Files\Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="Shaders\PixelShader.hlsl">
-      <Filter>Source Files\Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="Core\assets\shaders\VertexShader.hlsl">
-      <Filter>Source Files\Core\assets\shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="Core\assets\shaders\PixelShader.hlsl">
-      <Filter>Source Files\Core\assets\shaders</Filter>
-    </FxCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Logger.h">
-      <Filter>Source Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\include\Core\Debug.h">
-      <Filter>Source Files\Core\include\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\include\Utils\Logger.h">
-      <Filter>Source Files\Core\include\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\include\Graphics\Device.h">
-      <Filter>Source Files\Core\include\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\include\Core\Application.h">
-      <Filter>Source Files\Core\include\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\include\Core\Window.h">
-      <Filter>Source Files\Core\include\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\include\Graphics\Command.h">
-      <Filter>Source Files\Core\include\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\include\Graphics\SwapChain.h">
-      <Filter>Source Files\Core\include\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\include\Interfaces\IResource.h">
-      <Filter>Source Files\Core\include\Interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\include\Resources\DepthBuffer.h">
-      <Filter>Source Files\Core\include\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\include\Interfaces\IPipelineComponent.h">
-      <Filter>Source Files\Core\include\Interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\include\Graphics\RootSignature.h">
-      <Filter>Source Files\Core\include\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\include\Graphics\PipelineState.h">
-      <Filter>Source Files\Core\include\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\include\Math\Vector3.h">
-      <Filter>Source Files\Core\include\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\include\Math\Matrix4.h">
-      <Filter>Source Files\Core\include\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\include\Math\MathUtils.h">
-      <Filter>Source Files\Core\include\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\include\Interfaces\IRenderable.h">
-      <Filter>Source Files\Core\include\Interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\include\Graphics\Triangle.h">
-      <Filter>Source Files\Core\include\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\include\Math\Transform.h">
-      <Filter>Source Files\Core\include\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\include\Interfaces\IAssetLoader.h">
-      <Filter>Source Files\Core\include\Interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\include\Graphics\Camera.h">
-      <Filter>Source Files\Core\include\Graphics</Filter>
-    </ClInclude>
+    <ClCompile Include="src\Core\Device.cpp">
+      <Filter>Source Files\src\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Logger\Logger.cpp">
+      <Filter>Source Files\src\Logger</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

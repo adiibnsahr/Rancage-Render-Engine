@@ -18,6 +18,17 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\Core\Device.h" />
+    <ClInclude Include="include\Core\IRenderContext.h" />
+    <ClInclude Include="include\Logger\ILogger.h" />
+    <ClInclude Include="include\Logger\Logger.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Core\Device.cpp" />
+    <ClCompile Include="src\Logger\Logger.cpp" />
+    <ClCompile Include="src\main.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -134,73 +145,6 @@
       <AdditionalLibraryDirectories>$(ProjectDir)include;../Dependencies/DX12Headers\directx;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="Core\src\Core\Application.cpp" />
-    <ClCompile Include="Core\src\Core\Debug.cpp" />
-    <ClCompile Include="Core\src\Core\Window.cpp" />
-    <ClCompile Include="Core\src\Graphics\Camera.cpp" />
-    <ClCompile Include="Core\src\Graphics\Command.cpp" />
-    <ClCompile Include="Core\src\Graphics\Device.cpp" />
-    <ClCompile Include="Core\src\Graphics\PipelineState.cpp" />
-    <ClCompile Include="Core\src\Graphics\RootSignature.cpp" />
-    <ClCompile Include="Core\src\Graphics\SwapChain.cpp" />
-    <ClCompile Include="Core\src\Graphics\Triangle.cpp" />
-    <ClCompile Include="Core\src\Math\MathUtils.cpp" />
-    <ClCompile Include="Core\src\Math\Matrix4.cpp" />
-    <ClCompile Include="Core\src\Math\Transform.cpp" />
-    <ClCompile Include="Core\src\Math\Vector3.cpp" />
-    <ClCompile Include="Core\src\Resources\DepthBuffer.cpp" />
-    <ClCompile Include="Core\src\Utils\Logger.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="Core\assets\shaders\PixelShader.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
-    </FxCompile>
-    <FxCompile Include="Core\assets\shaders\VertexShader.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
-    </FxCompile>
-    <FxCompile Include="Shaders\PixelShader.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
-    </FxCompile>
-    <FxCompile Include="Shaders\VertexShader.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
-    </FxCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Core\include\Core\Application.h" />
-    <ClInclude Include="Core\include\Core\Debug.h" />
-    <ClInclude Include="Core\include\Core\Window.h" />
-    <ClInclude Include="Core\include\Graphics\Camera.h" />
-    <ClInclude Include="Core\include\Graphics\Command.h" />
-    <ClInclude Include="Core\include\Graphics\Device.h" />
-    <ClInclude Include="Core\include\Graphics\PipelineState.h" />
-    <ClInclude Include="Core\include\Graphics\RootSignature.h" />
-    <ClInclude Include="Core\include\Graphics\SwapChain.h" />
-    <ClInclude Include="Core\include\Graphics\Triangle.h" />
-    <ClInclude Include="Core\include\Interfaces\IAssetLoader.h" />
-    <ClInclude Include="Core\include\Interfaces\IPipelineComponent.h" />
-    <ClInclude Include="Core\include\Interfaces\IRenderable.h" />
-    <ClInclude Include="Core\include\Interfaces\IResource.h" />
-    <ClInclude Include="Core\include\Math\MathUtils.h" />
-    <ClInclude Include="Core\include\Math\Matrix4.h" />
-    <ClInclude Include="Core\include\Math\Transform.h" />
-    <ClInclude Include="Core\include\Math\Vector3.h" />
-    <ClInclude Include="Core\include\Resources\DepthBuffer.h" />
-    <ClInclude Include="Core\include\Utils\Logger.h" />
-    <ClInclude Include="Logger.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
