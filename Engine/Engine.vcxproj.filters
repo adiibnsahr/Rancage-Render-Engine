@@ -55,6 +55,24 @@
     <ClInclude Include="include\Logger\Logger.h">
       <Filter>Source Files\include\Logger</Filter>
     </ClInclude>
+    <ClInclude Include="include\Core\ICommandQueue.h">
+      <Filter>Source Files\include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\CommandQueue.h">
+      <Filter>Source Files\include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\ISwapChain.h">
+      <Filter>Source Files\include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\SwapChain.h">
+      <Filter>Source Files\include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Window.h">
+      <Filter>Source Files\include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\RenderContext.h">
+      <Filter>Source Files\include\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Device.cpp">
@@ -63,8 +81,20 @@
     <ClCompile Include="src\Logger\Logger.cpp">
       <Filter>Source Files\src\Logger</Filter>
     </ClCompile>
-    <ClCompile Include="src\main.cpp">
+    <ClCompile Include="src\Main.cpp">
       <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\SwapChain.cpp">
+      <Filter>Source Files\src\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Window.cpp">
+      <Filter>Source Files\src\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\RenderContext.cpp">
+      <Filter>Source Files\src\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\CommandQueue.cpp">
+      <Filter>Source Files\src\Core</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
